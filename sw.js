@@ -1,6 +1,6 @@
 // Sofra Service Worker
 // Versiyon değiştir → istemcide eski cache temizlenir
-const CACHE_VERSION = 'sofra-v1';
+const CACHE_VERSION = 'sofra-v3';
 const CORE_ASSETS = [
   './',
   './index.html',
