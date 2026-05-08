@@ -998,6 +998,36 @@ const MEAL_DATABASE = {
         'Üzerine limon sıkarak servis et.'
       ]
     },
+    {
+      id: 'firin-citir-balik-patates',
+      name: 'Fırında Çıtır Balık ve Patates',
+      category: 'fish',
+      season: 'all',
+      prepTime: 40,
+      tags: ['çocuk dostu', 'protein'],
+      side: 'Yoğurtlu sos + limon',
+      tip: 'Klasik fish & chips\'in ev versiyonu. Soda hamuru çıtırlığı verir, fırında yağsız pişer.',
+      ingredients: [
+        { name: 'Cod (morina) fileto', amount: 500, unit: 'g' },
+        { name: 'Un', amount: 1, unit: 'su bardağı' },
+        { name: 'Soda', amount: 1, unit: 'su bardağı' },
+        { name: 'Patates', amount: 4, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Sarımsak tozu', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Yoğurt', amount: 200, unit: 'g' },
+        { name: 'Dereotu', amount: 0.25, unit: 'demet' },
+        { name: 'Tuz', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Patatesleri ince çubuk doğra, zeytinyağı + baharatlarla karıştır, 200°C fırında 25 dk pişir.',
+        'Un + soda + tuzu çırp, hafif kıvamlı bir hamur yap.',
+        'Balıkları hamura batır, fırın kağıtlı tepsiye diz.',
+        'Patatesler bittiğinde balıkları üst rafa al, 200°C\'de 15 dk pişir.',
+        'Yoğurt + dereotuyla sosu hazırla, limonla servis.'
+      ]
+    },
   ],
 
   // ============ BAKLİYAT ============
@@ -1034,16 +1064,16 @@ const MEAL_DATABASE = {
     },
     {
       id: 'nohut-yemek',
-      name: 'Etli Nohut Yemeği',
+      name: 'Kıymalı Nohut Yemeği',
       category: 'legumes',
       season: 'all',
-      prepTime: 60,
+      prepTime: 50,
       tags: ['demir', 'çinko', 'protein'],
       side: 'Pirinç pilavı',
-      tip: 'Bitkisel demir, az miktar et ile birlikte daha iyi emilir. Pratiklik için akşamdan nohutu ıslat.',
+      tip: 'Bitkisel demir, az miktar kıyma ile birlikte daha iyi emilir. Pratiklik için akşamdan nohutu ıslat.',
       ingredients: [
         { name: 'Nohut (kuru, ıslatılmış)', amount: 2, unit: 'su bardağı' },
-        { name: 'Kuşbaşı dana eti', amount: 250, unit: 'g' },
+        { name: 'Dana kıyma', amount: 250, unit: 'g' },
         { name: 'Soğan', amount: 1, unit: 'adet (büyük)' },
         { name: 'Domates', amount: 2, unit: 'adet' },
         { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
@@ -1053,24 +1083,24 @@ const MEAL_DATABASE = {
       ],
       recipe: [
         'Nohutları haşla (40 dk) — düdüklüde 15 dk.',
-        'Soğanı tereyağı + zeytinyağında kavur, eti ekle.',
+        'Soğanı tereyağı + zeytinyağında kavur, kıymayı ekle.',
         'Domates ve salçayı ekle, 5 dk kavur.',
-        'Nohutları ve 3 bardak suyu ekle, 25 dk pişir.',
+        'Nohutları ve 3 bardak suyu ekle, 20 dk pişir.',
         'Pilavı paralel pişir.'
       ]
     },
     {
       id: 'kuru-fasulye',
-      name: 'Etli Kuru Fasulye',
+      name: 'Kıymalı Kuru Fasulye',
       category: 'legumes',
       season: 'all',
-      prepTime: 60,
+      prepTime: 50,
       tags: ['demir', 'protein'],
       side: 'Pirinç pilavı + havuç salatası',
       tip: 'Klasik fasulye-pilav tam protein. Yanında havuç salatası C vitamini için.',
       ingredients: [
         { name: 'Kuru fasulye (ıslatılmış)', amount: 2, unit: 'su bardağı' },
-        { name: 'Kuşbaşı et', amount: 200, unit: 'g' },
+        { name: 'Dana kıyma', amount: 200, unit: 'g' },
         { name: 'Soğan', amount: 1, unit: 'adet' },
         { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
         { name: 'Biber salçası', amount: 1, unit: 'çay kaşığı' },
@@ -1082,8 +1112,8 @@ const MEAL_DATABASE = {
       ],
       recipe: [
         'Fasulyeyi düdüklüde 25 dk haşla.',
-        'Soğanı tereyağı + zeytinyağında kavur, eti ekle.',
-        'Salçaları, fasulyeyi ve sıcak suyu ekle, 20 dk daha pişir.',
+        'Soğanı tereyağı + zeytinyağında kavur, kıymayı ekle.',
+        'Salçaları, fasulyeyi ve sıcak suyu ekle, 15 dk daha pişir.',
         'Havuçları rendele, limon + zeytinyağıyla salata yap.',
         'Pilavı paralel hazırla.'
       ]
@@ -1120,6 +1150,128 @@ const MEAL_DATABASE = {
         'Mücver: kabakları rendele, tuzla bekletip sık. Yumurta, un, peynir, otları ekle.',
         'Az yağda 3-4 dakika her iki tarafını kızart.',
         'Sarımsaklı yoğurt + limon ile servis.'
+      ]
+    },
+    {
+      id: 'firin-nohut',
+      name: 'Fırında Nohut',
+      category: 'legumes',
+      season: 'all',
+      prepTime: 45,
+      tags: ['demir', 'lif', 'çocuk dostu'],
+      side: 'Pirinç pilavı + yoğurt',
+      tip: 'Fırında pişen nohut sebzelerin tatlılığını alır. Kırmızı biberin C vitamini bitkisel demir emilimini artırır.',
+      ingredients: [
+        { name: 'Nohut (haşlanmış veya konserve)', amount: 2, unit: 'su bardağı' },
+        { name: 'Kırmızı biber', amount: 2, unit: 'adet' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Sarımsak', amount: 3, unit: 'diş' },
+        { name: 'Domates sosu', amount: 400, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Pirinç', amount: 1, unit: 'su bardağı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+      ],
+      recipe: [
+        'Soğan + biber + sarımsağı doğra, fırın kabına al.',
+        'Nohut + domates sosu + zeytinyağı + baharatları ekle, karıştır.',
+        '200°C fırında 30-35 dk pişir, ortada bir kez karıştır.',
+        'Pilavı paralel pişir.'
+      ]
+    },
+    {
+      id: 'humus-firin-sebze',
+      name: 'Humus ve Fırın Sebze',
+      category: 'legumes',
+      season: 'all',
+      prepTime: 50,
+      tags: ['demir', 'lif', 'kalsiyum'],
+      side: 'Pita ekmek',
+      tip: 'Tahin kalsiyum, nohut demir kaynağı. Limonun C vitamini emilimi destekler. Yağda eriyen vitaminler için sebzelerde bol zeytinyağı.',
+      ingredients: [
+        { name: 'Nohut (haşlanmış veya konserve)', amount: 2, unit: 'su bardağı' },
+        { name: 'Tahin', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 2, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Zeytinyağı', amount: 5, unit: 'yemek kaşığı' },
+        { name: 'Patates', amount: 2, unit: 'adet' },
+        { name: 'Tatlı patates', amount: 2, unit: 'adet' },
+        { name: 'Kabak', amount: 2, unit: 'adet' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Pita ekmek', amount: 4, unit: 'adet' },
+      ],
+      recipe: [
+        'Patates + tatlı patates + kabağı küp doğra, zeytinyağı + baharatlarla karıştır.',
+        '200°C fırında 30-35 dk pişir.',
+        'Humus: nohut + tahin + limon suyu + sarımsak + kimyon + 4-5 yemek kaşığı su, blendırla.',
+        'Tabağa humus, üstüne fırın sebzeler, biraz daha zeytinyağı.',
+        'Pita ile servis.'
+      ]
+    },
+    {
+      id: 'dort-kasik-corbasi',
+      name: '4 Kaşık Çorbası',
+      category: 'legumes',
+      season: 'all',
+      prepTime: 45,
+      tags: ['demir', 'protein'],
+      side: 'Yanında ekmek + zeytinyağı',
+      tip: 'İki çeşit mercimek + bulgur + yoğurt-yumurta terbiyesi: tam protein, demir ve lif zengini. Çocuk için kremalı dokusu güzel.',
+      ingredients: [
+        { name: 'Yeşil mercimek', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Kırmızı mercimek', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Bulgur (ince)', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Yoğurt', amount: 200, unit: 'g' },
+        { name: 'Yumurta', amount: 1, unit: 'adet' },
+        { name: 'Un', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Kuru nane', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tuz', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Yeşil mercimeği 6 bardak suda 20 dk haşla.',
+        'Kırmızı mercimek + bulguru ekle, 15 dk daha pişir.',
+        'Yoğurt + yumurta + unu çırp, sıcak çorbadan 1 kepçe ekleyerek terbiye et.',
+        'Terbiyeli karışımı çorbaya yedir, 5 dk kaynat.',
+        'Tereyağında naneyi yak, çorbanın üzerine gez.'
+      ]
+    },
+    {
+      id: 'yesil-mercimek-manti',
+      name: 'Yeşil Mercimek Mantı',
+      category: 'legumes',
+      season: 'all',
+      prepTime: 75,
+      tags: ['demir', 'protein', 'çocuk dostu'],
+      side: 'Sarımsaklı yoğurt + tereyağlı domates sos',
+      tip: 'Yeşil mercimek + kıyma çift demir kaynağı, hamur sevimli kılar. Hafta sonu projesi gibi düşün, donmuş olarak da saklanır.',
+      ingredients: [
+        { name: 'Yeşil mercimek', amount: 1, unit: 'su bardağı' },
+        { name: 'Un', amount: 3, unit: 'su bardağı' },
+        { name: 'Yumurta', amount: 1, unit: 'adet' },
+        { name: 'Dana kıyma', amount: 250, unit: 'g' },
+        { name: 'Havuç', amount: 1, unit: 'adet' },
+        { name: 'Kabak', amount: 1, unit: 'adet' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Domates sosu', amount: 200, unit: 'g' },
+        { name: 'Yoğurt', amount: 300, unit: 'g' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Tereyağı', amount: 40, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Kuru nane', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tuz', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Yeşil mercimeği 25 dk haşla, süz.',
+        'Hamur: un + yumurta + 1 bardak ılık su + tuz, yoğur, 20 dk dinlendir.',
+        'İç harç: soğan + havuç + kabağı rendele, zeytinyağında soldur, kıymayı ekle, suyunu çek. Mercimeği ekle, soğut.',
+        'Hamuru ince aç, kareler kes, içine harç koy, mantı şekli ver (köşeleri birleştir).',
+        'Tuzlu suda 8-10 dk haşla, süz.',
+        'Sarımsaklı yoğurtla servis. Üzerine tereyağında yakılmış domates sosu + nane + tatlı biber.'
       ]
     },
   ],
@@ -1159,15 +1311,15 @@ const MEAL_DATABASE = {
     },
     {
       id: 'kiymali-gul-boregi',
-      name: 'Kıymalı Gül Böreği',
+      name: 'Kıymalı Glutensiz Gül Böreği',
       category: 'groundMeat',
       season: 'all',
       prepTime: 50,
-      tags: ['çocuk dostu'],
+      tags: ['glutensiz', 'çocuk dostu'],
       side: 'Mercimek çorbası + roka salatası',
-      tip: 'Roka folat ve C vitamini açısından zengin; demir emilimini destekler.',
+      tip: 'Pirinç yufkası ile glutensiz versiyonu. Roka folat ve C vitamini açısından zengin; demir emilimini destekler.',
       ingredients: [
-        { name: 'Yufka', amount: 4, unit: 'adet' },
+        { name: 'Pirinç yufkası (yuvarlak, glutensiz)', amount: 8, unit: 'adet' },
         { name: 'Dana kıyma', amount: 300, unit: 'g' },
         { name: 'Soğan', amount: 2, unit: 'adet' },
         { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
@@ -1184,9 +1336,10 @@ const MEAL_DATABASE = {
       ],
       recipe: [
         'Kıyma + soğanı tavada kavur, suyunu çek. Maydanoz ekle, soğut.',
-        'Yufkayı dörde böl, harç koy, gül şekli ver.',
+        'Pirinç yufkasını ılık suya birkaç saniye batırıp yumuşat, hemen düz zemine al.',
+        'Harcı yufkanın bir kenarına koy, gül şekli ver (rulo yapıp spiral kıvır).',
         'Üzerine yumurta + süt sür, susam + çörek otu serp.',
-        '180°C fırında 25 dk pişir.',
+        '180°C fırında 20 dk pişir (pirinç yufkası daha hızlı pişer).',
         'Çorba: mercimek + sebzeleri 4 bardak suda 25 dk haşla, blendırla.',
         'Salata: roka + limon + zeytinyağı.'
       ]
@@ -1259,35 +1412,208 @@ const MEAL_DATABASE = {
       ]
     },
     {
-      id: 'kiymali-pirincli-kabak',
-      name: 'Kıymalı Kabak Dolması (Bahar)',
+      id: 'firin-kiymali-tatli-patates',
+      name: 'Fırında Kıymalı Tatlı Patates',
       category: 'groundMeat',
-      season: ['spring', 'summer'],
+      season: 'all',
       prepTime: 50,
-      tags: ['demir', 'lif'],
-      side: 'Yoğurt',
-      tip: 'Bahar kabağı en bol bulunduğu zaman. Pirinç + kıyma çocuk için kolay yenir, lifli ve dengeli.',
+      tags: ['demir', 'beta-karoten', 'çocuk dostu'],
+      side: 'Yoğurt + yeşil salata',
+      tip: 'Tatlı patatesteki beta-karoten kıymanın yağıyla birlikte daha iyi emilir. Çocuk için tatlı-tuzlu dengeli bir öğün.',
       ingredients: [
-        { name: 'Kabak (orta boy)', amount: 4, unit: 'adet' },
-        { name: 'Dana kıyma', amount: 300, unit: 'g' },
-        { name: 'Pirinç', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Tatlı patates', amount: 4, unit: 'adet (orta)' },
+        { name: 'Dana kıyma', amount: 400, unit: 'g' },
         { name: 'Soğan', amount: 1, unit: 'adet' },
-        { name: 'Domates', amount: 2, unit: 'adet' },
-        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
-        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
-        { name: 'Dereotu', amount: 0.5, unit: 'demet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Domates sosu', amount: 300, unit: 'g' },
         { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
-        { name: 'Tereyağı', amount: 20, unit: 'g' },
-        { name: 'Limon', amount: 1, unit: 'adet' },
-        { name: 'Yoğurt', amount: 300, unit: 'g' },
-        { name: 'Sarımsak', amount: 1, unit: 'diş' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Yoğurt', amount: 200, unit: 'g' },
+        { name: 'Maydanoz', amount: 0.25, unit: 'demet' },
       ],
       recipe: [
-        'Kabakların içini oy, içlerini sebze suyuna at.',
-        'Kıyma + soğan + pirinç + salça + ot + tuzla harcı yoğur.',
-        'Kabakları doldur, tencereye diz, üzerine doğranmış domates.',
-        '2 bardak sıcak su + tereyağı, kısık ateşte 35-40 dk pişir.',
-        'Sarımsaklı yoğurt + limonla servis.'
+        'Tatlı patatesleri uzunlamasına ikiye böl, zeytinyağı sür, 200°C\'de 30 dk pişir.',
+        'Soğan + sarımsağı kavur, kıymayı ekle, suyunu çek.',
+        'Domates sosu + baharatları ekle, 10 dk pişir.',
+        'Patatesleri çatalla iç kısmından ez, üzerine kıyma harcı koy.',
+        'Yoğurt + maydanozla servis.'
+      ]
+    },
+    {
+      id: 'firin-nohutlu-kofte',
+      name: 'Fırında Nohutlu Köfte',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 50,
+      tags: ['demir', 'lif'],
+      side: 'Pirinç pilavı veya bulgur',
+      tip: 'Kıyma ve nohut beraber çok dengeli bir demir + protein kaynağı. Domates sosundaki C vitamini emilimi katlar.',
+      ingredients: [
+        { name: 'Dana kıyma', amount: 400, unit: 'g' },
+        { name: 'Nohut (haşlanmış)', amount: 1, unit: 'su bardağı' },
+        { name: 'Kırmızı biber', amount: 2, unit: 'adet' },
+        { name: 'Soğan', amount: 2, unit: 'adet' },
+        { name: 'Sarımsak', amount: 3, unit: 'diş' },
+        { name: 'Domates sosu', amount: 400, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Pirinç', amount: 1, unit: 'su bardağı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+      ],
+      recipe: [
+        'Kıyma + 1 rendelenmiş soğan + sarımsak + maydanoz + kimyonla yoğur, küçük köfteler yap.',
+        'Diğer soğan + biberi doğra, fırın kabına yay, üzerine köfteleri diz.',
+        'Aralarına nohutları serpiştir, üzerine domates sosu + zeytinyağı.',
+        '200°C fırında 30-35 dk pişir.',
+        'Pilavı paralel hazırla.'
+      ]
+    },
+    {
+      id: 'kiymali-tarhana-corbasi',
+      name: 'Kıymalı Tarhana Çorbası',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 30,
+      tags: ['demir', 'B12', 'pratik'],
+      side: 'Ekmek + zeytin',
+      tip: 'Tarhana fermente, B vitaminleri ve probiyotik açısından zengin. Kıyma B12 ve demir ekler. Çocuk için ekşilik dozu az tutulmalı.',
+      ingredients: [
+        { name: 'Tarhana (kuru)', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Dana kıyma', amount: 200, unit: 'g' },
+        { name: 'Domates sosu', amount: 200, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Su', amount: 1.5, unit: 'l' },
+      ],
+      recipe: [
+        'Tarhanayı 1 bardak ılık suda ezerek dağıt, 10 dk beklet.',
+        'Soğanı tereyağında kavur, kıymayı ekle, suyunu çek.',
+        'Domates sosu + tatlı biberi ekle, 3 dk kavur.',
+        '1.5 litre suyu + tarhana karışımını ekle, kaynatıp 15 dk pişir, sürekli karıştır.'
+      ]
+    },
+    {
+      id: 'kiymali-sebzeli-makarna',
+      name: 'Kıymalı Sebzeli Makarna',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 30,
+      tags: ['demir', 'lif', 'çocuk dostu'],
+      side: 'Yeşil salata + parmesan',
+      tip: 'Sebzeleri rendeleyince çocuk fark etmez. Kıyma + sebze + makarna dengeli ve hızlı bir çocuk öğünü.',
+      ingredients: [
+        { name: 'Penne veya fusilli', amount: 400, unit: 'g' },
+        { name: 'Dana kıyma', amount: 350, unit: 'g' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Kabak', amount: 1, unit: 'adet' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Domates sosu', amount: 400, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Kekik', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Parmesan (rendelenmiş)', amount: 50, unit: 'g' },
+      ],
+      recipe: [
+        'Makarnayı al dente haşla.',
+        'Soğan + sarımsağı zeytinyağında kavur, rendelenmiş havuç + kabağı ekle 3 dk soldur.',
+        'Kıymayı ekle, suyunu çek.',
+        'Domates sosu + kekik, 8-10 dk pişir.',
+        'Süzülmüş makarnayı sosa karıştır, parmesanla servis.'
+      ]
+    },
+    {
+      id: 'kiymali-bulgur-pilavi',
+      name: 'Kıymalı Bulgur Pilavı',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 30,
+      tags: ['demir', 'lif', 'pratik'],
+      side: 'Yoğurt + cacık',
+      tip: 'Tek tencere yemek. Bulgurun lifini kıymanın demirini ve sebzelerin C vitaminini bir araya getirir.',
+      ingredients: [
+        { name: 'Bulgur (pilavlık)', amount: 1.5, unit: 'su bardağı' },
+        { name: 'Dana kıyma', amount: 300, unit: 'g' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Kabak', amount: 1, unit: 'adet' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Domates sosu', amount: 200, unit: 'g' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Yoğurt', amount: 250, unit: 'g' },
+      ],
+      recipe: [
+        'Soğanı tereyağı + zeytinyağında kavur, kıymayı ekle, suyunu çek.',
+        'Doğranmış havuç + kabağı ekle, 5 dk soldur.',
+        'Domates sosu + kimyon, 2 dk kavur.',
+        'Bulgur + 3 bardak sıcak su + tuz, kapağı kapat.',
+        'Kısık ateşte 15-18 dk pişir, 5 dk dinlendir. Yoğurtla servis.'
+      ]
+    },
+    {
+      id: 'kilis-tava',
+      name: 'Kilis Tava',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 50,
+      tags: ['demir', 'çocuk dostu'],
+      side: 'Pirinç pilavı + cacık',
+      tip: 'Tek tepside Anadolu yemeği — kıyma + patates + biber üst üste fırında pişer. Domates sos demir emilimini destekler.',
+      ingredients: [
+        { name: 'Dana kıyma', amount: 400, unit: 'g' },
+        { name: 'Patates', amount: 4, unit: 'adet' },
+        { name: 'Kırmızı biber', amount: 2, unit: 'adet' },
+        { name: 'Soğan', amount: 2, unit: 'adet' },
+        { name: 'Sarımsak', amount: 3, unit: 'diş' },
+        { name: 'Domates sosu', amount: 300, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Pirinç', amount: 1, unit: 'su bardağı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+      ],
+      recipe: [
+        'Kıymayı 1 rendelenmiş soğan + sarımsak + baharatlarla yoğur, fırın kabının tabanına yay.',
+        'Üzerine ince doğranmış patates + biber + diğer soğan dilimleri.',
+        'Domates sosu + zeytinyağını gez.',
+        '200°C fırında 35-40 dk pişir.',
+        'Maydanozla süsle, pilavla servis.'
+      ]
+    },
+    {
+      id: 'kolay-lahmacun',
+      name: 'Kolay Lahmacun',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 30,
+      tags: ['demir', 'pratik', 'çocuk dostu'],
+      side: 'Limon + maydanoz + ayran',
+      tip: 'Yufka ile hamursuz ve hızlı versiyonu. Çocuk için baharat dozu az tutulur, biberden sadece tat verir.',
+      ingredients: [
+        { name: 'Yufka', amount: 4, unit: 'adet' },
+        { name: 'Dana kıyma', amount: 400, unit: 'g' },
+        { name: 'Kırmızı biber', amount: 2, unit: 'adet' },
+        { name: 'Soğan', amount: 2, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Domates sosu', amount: 150, unit: 'g' },
+        { name: 'Maydanoz', amount: 1, unit: 'demet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Limon', amount: 2, unit: 'adet' },
+        { name: 'Tuz', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Soğan + biber + sarımsak + maydanozu rondodan ince ince geçir veya çok ince doğra.',
+        'Kıyma + sebze karışımı + domates sosu + baharatları yoğur.',
+        'Yufkayı ikiye böl (yarım daire), zeytinyağıyla hafif fırçala.',
+        'Üzerine ince tabaka harç yay (kenarlardan 1 cm boş bırak).',
+        '220°C fırında 8-10 dk pişir, kenarları kızarmalı.',
+        'Limon + maydanozla servis.'
       ]
     },
   ],
@@ -1381,6 +1707,37 @@ const MEAL_DATABASE = {
         'Tavukları küp doğra, tavada zeytinyağıyla 5-6 dk kızart.',
         'Sarımsak + soya + bal + limon karışımını ekle, 2 dk karıştırarak pişir.',
         'Kuşkonmazı ayrı tavada tereyağıyla 5 dk sotele.'
+      ]
+    },
+    {
+      id: 'firin-citir-tavuk',
+      name: 'Fırında Çıtır Tavuk',
+      category: 'chicken',
+      season: 'all',
+      prepTime: 35,
+      tags: ['protein', 'çocuk dostu'],
+      side: 'Fırın patates + yeşil salata',
+      tip: 'Cornflakes kaplama fırında çıtırlık verir, fritözden daha sağlıklı. Çocuk için tutkal gibi sevilir.',
+      ingredients: [
+        { name: 'Tavuk göğüs (fileto)', amount: 600, unit: 'g' },
+        { name: 'Cornflakes (sade)', amount: 2, unit: 'su bardağı' },
+        { name: 'Yumurta', amount: 2, unit: 'adet' },
+        { name: 'Un', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Sarımsak tozu', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Kekik', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tuz', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Karabiber', amount: 1, unit: 'çimdik' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Patates', amount: 4, unit: 'adet' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Cornflakes\'i poşette ufala, baharatlarla karıştır.',
+        'Tavukları parmak şeklinde kes. Sırasıyla un → çırpılmış yumurta → cornflakes\'e batır.',
+        'Patatesleri çubuk doğra, zeytinyağıyla tepsiye yay.',
+        'Üst rafa tavukları ekle, 200°C fırında 25 dk pişir.',
+        'Limonla servis et.'
       ]
     },
   ],
@@ -1565,6 +1922,234 @@ const MEAL_DATABASE = {
         '200°C fırında 30 dk pişir.',
         'Bulgur: tereyağında salça + bulguru kavur, 3 bardak sıcak su, 15 dk.',
         'Lor peynirini yanında servis et.'
+      ]
+    },
+    {
+      id: 'sebzeli-bulgur-pilavi',
+      name: 'Sebzeli Bulgur Pilavı',
+      category: 'vegetable',
+      season: 'all',
+      prepTime: 30,
+      tags: ['lif', 'pratik', 'çocuk dostu'],
+      side: 'Yoğurt veya cacık',
+      tip: 'Mevsim sebzeleriyle değişen tek tencere yemek. İlkbaharda kuşkonmaz + bezelye, kışta pırasa + havuç. Yoğurt protein ekler.',
+      ingredients: [
+        { name: 'Bulgur (pilavlık)', amount: 1.5, unit: 'su bardağı' },
+        { name: 'Pırasa veya kuşkonmaz (mevsime göre)', amount: 200, unit: 'g' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Bezelye (taze veya donmuş)', amount: 200, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Yoğurt', amount: 200, unit: 'g' },
+      ],
+      recipe: [
+        'Soğanı tereyağı + zeytinyağında kavur, doğranmış sebzeleri ekle, 5 dk soldur.',
+        'Salçayı ekle, 1 dk kavur.',
+        'Bulgur + 3 bardak sıcak su + tuz, kapağı kapat.',
+        'Kısık ateşte 15-18 dk pişir, 5 dk dinlendir.',
+        'Yoğurtla servis et.'
+      ]
+    },
+    {
+      id: 'pirasa-brokoli-mucver',
+      name: 'Pırasa ve Brokolili Mücver',
+      category: 'vegetable',
+      season: ['autumn', 'winter', 'spring'],
+      prepTime: 35,
+      tags: ['lif', 'kalsiyum', 'C vitamini'],
+      side: 'Sarımsaklı yoğurt + yeşil salata',
+      tip: 'Brokoli C vitamini + folat, pırasa lif kaynağı. Beyaz peynir kalsiyum + protein dengesi sağlar. Kış ve ilkbahar için ideal.',
+      ingredients: [
+        { name: 'Pırasa', amount: 2, unit: 'adet' },
+        { name: 'Brokoli', amount: 1, unit: 'adet (orta)' },
+        { name: 'Havuç', amount: 1, unit: 'adet' },
+        { name: 'Beyaz peynir', amount: 150, unit: 'g' },
+        { name: 'Yumurta', amount: 3, unit: 'adet' },
+        { name: 'Un', amount: 5, unit: 'yemek kaşığı' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Yoğurt', amount: 250, unit: 'g' },
+        { name: 'Sarımsak', amount: 1, unit: 'diş' },
+        { name: 'Tuz', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Pırasayı ince doğra, brokoliyi 5 dk hafif haşla ve doğra, havucu rendele.',
+        'Yumurta + un + peynir + sebzeleri karıştır, tuz ekle.',
+        'Tavada zeytinyağı kızdır, kaşıkla harç al, her iki yüzü 3-4 dk pişir.',
+        'Sarımsaklı yoğurtla servis et.'
+      ]
+    },
+    {
+      id: 'tarhana-corbasi-sade',
+      name: 'Tarhana Çorbası (Sade)',
+      category: 'vegetable',
+      season: ['autumn', 'winter'],
+      prepTime: 25,
+      tags: ['fermente', 'pratik', 'B vitamini'],
+      side: 'Beyaz peynir + ekmek + zeytin',
+      tip: 'Fermente tarhana B vitaminleri ve probiyotik açısından zengin. Soğuk hava için ideal pratik çorba.',
+      ingredients: [
+        { name: 'Tarhana (kuru)', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Domates sosu', amount: 200, unit: 'g' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Tatlı toz biber', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Kuru nane', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Su', amount: 1.5, unit: 'l' },
+        { name: 'Tuz', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Beyaz peynir', amount: 150, unit: 'g' },
+      ],
+      recipe: [
+        'Tarhanayı 1 bardak ılık suda ezerek dağıt, 10 dk beklet.',
+        'Tereyağında domates sosunu 3 dk kavur, baharatları ekle.',
+        '1.5 litre suyu + tarhanayı ekle, sürekli karıştırarak kaynat.',
+        'Kısık ateşte 15 dk pişir.',
+        'Beyaz peynirle servis et.'
+      ]
+    },
+    {
+      id: 'sebzeli-kinoa',
+      name: 'Sebzeli Kinoa',
+      category: 'vegetable',
+      season: 'all',
+      prepTime: 30,
+      tags: ['protein', 'glutensiz', 'lif'],
+      side: 'Yoğurt + limon',
+      tip: 'Kinoa tam protein içerir, çocuk için iyi alternatif. Mevsime göre sebze değiştir: ilkbaharda kuşkonmaz, sonbaharda pırasa.',
+      ingredients: [
+        { name: 'Kinoa', amount: 1.5, unit: 'su bardağı' },
+        { name: 'Pırasa veya kuşkonmaz (mevsime göre)', amount: 200, unit: 'g' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Bezelye (taze veya donmuş)', amount: 200, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Yoğurt', amount: 200, unit: 'g' },
+      ],
+      recipe: [
+        'Kinoayı yıka, 3 bardak suda 15 dk pişir, süz.',
+        'Soğan + sarımsağı zeytinyağında kavur, sebzeleri ekleyip 5 dk soldur.',
+        'Kinoayı sebzelerle karıştır, limon + maydanoz ekle.',
+        'Yoğurtla servis et.'
+      ]
+    },
+    {
+      id: 'kabak-siyirma',
+      name: 'Kabak Sıyırma',
+      category: 'vegetable',
+      season: ['spring', 'summer'],
+      prepTime: 35,
+      tags: ['lif', 'hafif', 'çocuk dostu'],
+      side: 'Yoğurt + ekmek',
+      tip: 'Klasik Anadolu yemeği. Kabak ve pirinç çocuk için kolay sindirilir. Limon C vitamini katar.',
+      ingredients: [
+        { name: 'Kabak', amount: 5, unit: 'adet (orta)' },
+        { name: 'Pirinç', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Dereotu', amount: 0.5, unit: 'demet' },
+        { name: 'Yoğurt', amount: 250, unit: 'g' },
+      ],
+      recipe: [
+        'Kabakları rendele veya ince ince doğra.',
+        'Soğan + sarımsağı tereyağı + zeytinyağında kavur.',
+        'Kabakları ekle, 5 dk soldur.',
+        'Pirinç + 1 bardak sıcak su + tuz, 20 dk pişir.',
+        'Dereotu + limonla servis. Yoğurt yanında.'
+      ]
+    },
+    {
+      id: 'pirasali-borek',
+      name: 'Pırasalı Börek',
+      category: 'vegetable',
+      season: ['autumn', 'winter', 'spring'],
+      prepTime: 50,
+      tags: ['lif', 'çocuk dostu'],
+      side: 'Mercimek çorbası + salata',
+      tip: 'Pırasa kış lif kaynağı, peynir kalsiyum + protein. Çocuk için sevilen bir öğün.',
+      ingredients: [
+        { name: 'Yufka', amount: 4, unit: 'adet' },
+        { name: 'Pırasa', amount: 3, unit: 'adet' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Beyaz peynir', amount: 200, unit: 'g' },
+        { name: 'Yumurta', amount: 2, unit: 'adet' },
+        { name: 'Süt', amount: 150, unit: 'ml' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Susam', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Çörek otu', amount: 1, unit: 'yemek kaşığı' },
+      ],
+      recipe: [
+        'Pırasayı ince doğra, havucu rendele. Tereyağında 8-10 dk soldur.',
+        'Soğut, peynirle karıştır.',
+        '1 yumurta + süt + zeytinyağını çırp.',
+        'Yufkayı kabaca yağla, harç koy, rulo yap, tepsiye spiral diz (kol böreği) veya bohça yap.',
+        'Üzerine kalan yumurta + süt karışımını gez, susam + çörek otu serp.',
+        '180°C fırında 30-35 dk pişir.'
+      ]
+    },
+    {
+      id: 'tatli-patates-pizza',
+      name: 'Tatlı Patates Pizza',
+      category: 'vegetable',
+      season: 'all',
+      prepTime: 45,
+      tags: ['beta-karoten', 'çocuk dostu', 'kalsiyum'],
+      side: 'Yeşil salata',
+      tip: 'Pizza hamuru yerine tatlı patates tabanı: glutensiz, beta-karoten + lif zengini. Çocuk için tatlı doku, peynirle protein.',
+      ingredients: [
+        { name: 'Tatlı patates', amount: 500, unit: 'g' },
+        { name: 'Un', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Yumurta', amount: 1, unit: 'adet' },
+        { name: 'Rendelenmiş peynir (mozarella veya kaşar)', amount: 200, unit: 'g' },
+        { name: 'Mantar', amount: 200, unit: 'g' },
+        { name: 'Domates sosu', amount: 200, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Kekik', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Sarımsak tozu', amount: 0.5, unit: 'çay kaşığı' },
+        { name: 'Tuz', amount: 0.5, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Tatlı patatesleri rendele, suyunu sıkıca çıkar.',
+        'Un + yumurta + sarımsak tozu + tuzla karıştır.',
+        'Fırın kağıtlı tepsiye yay, daire şekli ver, 200°C fırında 20 dk ön pişir.',
+        'Üzerine domates sosu + mantar dilimleri + peynir + kekik.',
+        '10 dk daha pişir, peynir eridiğinde çıkar.'
+      ]
+    },
+    {
+      id: 'sebzeli-mercimek-corbasi',
+      name: 'Sebzeli Mercimek Çorbası',
+      category: 'vegetable',
+      season: 'all',
+      prepTime: 40,
+      tags: ['demir', 'lif', 'C vitamini', 'çocuk dostu'],
+      side: 'Limon + ekmek',
+      tip: 'Klasik mercimeği renklendiren versiyon. Brokoli C vitamini bitkisel demir emilimini destekler. Blendırlanmış halinde çocuk severek içer.',
+      ingredients: [
+        { name: 'Kırmızı mercimek', amount: 1, unit: 'su bardağı' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Pırasa', amount: 1, unit: 'adet' },
+        { name: 'Brokoli', amount: 0.5, unit: 'adet' },
+        { name: 'Kabak', amount: 1, unit: 'adet' },
+        { name: 'Patates', amount: 1, unit: 'adet' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Tuz', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Soğanı zeytinyağı + tereyağında kavur.',
+        'Doğranmış sebzeleri ekle, 3 dk soldur.',
+        'Mercimek + 6 bardak sıcak su + tuz, 25 dk pişir (sebzeler yumuşayana kadar).',
+        'Blendırla, kıvamı suyla ayarla.',
+        'Limonla servis et.'
       ]
     },
   ],
@@ -1775,6 +2360,36 @@ const MEAL_DATABASE = {
         'Limon kabuğu rendesi + suyu + parmesan, karabiberle servis et.'
       ]
     },
+    {
+      id: 'kinoa-kisir',
+      name: 'Kinoa Kısır',
+      category: 'weekdayLunch',
+      season: 'all',
+      prepTime: 20,
+      tags: ['protein', 'glutensiz', 'lif'],
+      side: '',
+      tip: 'Klasik kısırın glutensiz protein bombası versiyonu. Kinoa tam protein, nar ekşisi C vitamini ekler. Önceden hazırla, soğuk da güzel.',
+      ingredients: [
+        { name: 'Kinoa', amount: 1, unit: 'su bardağı' },
+        { name: 'Domates', amount: 2, unit: 'adet' },
+        { name: 'Salatalık', amount: 1, unit: 'adet' },
+        { name: 'Taze soğan', amount: 4, unit: 'adet' },
+        { name: 'Maydanoz', amount: 1, unit: 'demet' },
+        { name: 'Nane (taze)', amount: 0.25, unit: 'demet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Biber salçası', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Nar ekşisi', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Sumak', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Kinoayı yıka, 2 bardak suda 12 dk pişir, süz, soğumaya bırak.',
+        'Sebzeleri ve otları ince ince doğra.',
+        'Salçaları zeytinyağıyla ezerek karıştır.',
+        'Tüm malzemeleri kinoaya ekle, nar ekşisi + limon + sumakla soslayın.'
+      ]
+    },
   ],
 };
 
@@ -1809,8 +2424,8 @@ function isInSeason(meal, currentSeason) {
 
 </script>
 <script>
-const DAYS = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
-const DAYS_SHORT = ['PZT', 'SAL', 'ÇAR', 'PER', 'CUM', 'CMT', 'PAZ'];
+const DAYS = ['Cumartesi', 'Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
+const DAYS_SHORT = ['CMT', 'PAZ', 'PZT', 'SAL', 'ÇAR', 'PER', 'CUM'];
 const SEASON_LABELS = { spring: 'İlkbahar', summer: 'Yaz', autumn: 'Sonbahar', winter: 'Kış' };
 const STORAGE_KEY = 'sofra:current-week';
 const CHECKED_KEY = 'sofra:checked-items';
@@ -1894,11 +2509,11 @@ function generateWeek() {
     dinners[idx] = meal;
   });
 
-  // Haftaiçi öğleler
+  // Haftaiçi öğleler — Pzt-Cum (index 2-6)
   const lunches = new Array(7).fill(null);
   const usedLunchIds = [];
   const lunchPool = getSeasonalPool('weekdayLunch', season);
-  for (let i = 0; i < 5; i++) {
+  for (let i = 2; i < 7; i++) {
     if (lunchPool.length === 0) break;
     const m = pickRandom(lunchPool, usedLunchIds);
     usedLunchIds.push(m.id);
@@ -1968,7 +2583,7 @@ function renderWeekGrid() {
   const grid = document.getElementById('weekGrid');
   grid.innerHTML = '';
   currentWeek.days.forEach((day, idx) => {
-    const isWeekend = idx >= 5;
+    const isWeekend = idx < 2;
     const card = document.createElement('div');
     card.className = 'day-card' + (selectedDayIdx === idx ? ' selected' : '');
     card.innerHTML = `
