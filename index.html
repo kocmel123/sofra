@@ -1,0 +1,2452 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sofra · Haftalık Menü Planlayıcı</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#c2603e">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sofra">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf6ef;
+    --bg-card: #ffffff;
+    --bg-soft: #f3ede1;
+    --ink: #2b2420;
+    --ink-soft: #6b5e54;
+    --ink-mute: #998a7e;
+    --line: #e8dfd0;
+    --terracotta: #c2603e;
+    --terracotta-soft: #e8a48c;
+    --olive: #6b7a3d;
+    --olive-soft: #a8b377;
+    --honey: #c89855;
+    --plum: #8b4a5a;
+    --shadow-sm: 0 1px 2px rgba(43, 36, 32, 0.04), 0 2px 8px rgba(43, 36, 32, 0.04);
+    --shadow-md: 0 2px 6px rgba(43, 36, 32, 0.06), 0 8px 24px rgba(43, 36, 32, 0.08);
+    --shadow-lg: 0 4px 12px rgba(43, 36, 32, 0.08), 0 24px 48px rgba(43, 36, 32, 0.12);
+    --radius-sm: 8px;
+    --radius: 14px;
+    --radius-lg: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(232, 164, 140, 0.08), transparent 35%),
+      radial-gradient(circle at 88% 92%, rgba(168, 179, 119, 0.08), transparent 40%);
+    background-attachment: fixed;
+  }
+
+  .app {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 28px 80px;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 28px;
+    margin-bottom: 36px;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+  .brand .logo {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 38px;
+    color: var(--terracotta);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .brand .tag {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 15px;
+    color: var(--ink-soft);
+    letter-spacing: 0.02em;
+  }
+  .week-info {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .week-info .pill {
+    background: var(--bg-soft);
+    padding: 7px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+  }
+  .season-badge {
+    background: var(--olive-soft);
+    color: var(--ink);
+    padding: 7px 14px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  .week-info button {
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 9px 18px;
+    border-radius: 100px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
+  }
+  .week-info button:hover {
+    background: var(--terracotta);
+    transform: translateY(-1px);
+  }
+  .week-info .btn-add {
+    background: var(--olive);
+  }
+  .week-info .btn-add:hover {
+    background: var(--terracotta);
+  }
+
+  /* ADD MEAL FORM */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 16px;
+  }
+  @media (max-width: 540px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .form-field.full { grid-column: 1 / -1; }
+  .form-field label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-mute);
+    font-weight: 500;
+  }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    transition: all 0.15s ease;
+  }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    outline: none;
+    border-color: var(--terracotta);
+    background: var(--bg-card);
+  }
+  .form-field textarea {
+    resize: vertical;
+    min-height: 80px;
+    font-family: 'DM Sans', monospace;
+    line-height: 1.6;
+  }
+  .form-field .hint {
+    font-size: 11.5px;
+    color: var(--ink-mute);
+    font-style: italic;
+    line-height: 1.4;
+  }
+  .backup-hint {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--bg-soft);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    margin-top: 8px;
+  }
+  .backup-hint strong { color: var(--ink); font-weight: 500; }
+  .form-error {
+    background: rgba(194, 96, 62, 0.08);
+    border: 1px solid var(--terracotta-soft);
+    color: var(--terracotta);
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: none;
+  }
+  .form-error.active { display: block; }
+  .form-success {
+    background: rgba(168, 179, 119, 0.18);
+    border: 1px solid var(--olive-soft);
+    color: #4a5527;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    margin-bottom: 12px;
+    display: none;
+  }
+  .form-success.active { display: block; }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 32px;
+    background: var(--bg-soft);
+    padding: 5px;
+    border-radius: 100px;
+    width: fit-content;
+    border: 1px solid var(--line);
+  }
+  .tabs button {
+    background: transparent;
+    border: none;
+    padding: 9px 22px;
+    border-radius: 100px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-soft);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .tabs button.active {
+    background: var(--bg-card);
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* WEEK GRID */
+  .week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 14px;
+  }
+  @media (max-width: 1100px) {
+    .week-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .week-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 460px) {
+    .week-grid { grid-template-columns: 1fr; }
+  }
+
+  .day-card {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 16px 16px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.2, 0.7, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 200px;
+  }
+  .day-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--terracotta);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .day-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--terracotta-soft);
+  }
+  .day-card:hover::before { opacity: 1; }
+  .day-card.selected {
+    border-color: var(--terracotta);
+    box-shadow: var(--shadow-md);
+  }
+  .day-card.selected::before { opacity: 1; }
+
+  .day-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+  }
+  .day-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 18px;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .day-name.weekend {
+    color: var(--terracotta);
+    font-style: italic;
+  }
+  .day-num {
+    font-size: 11px;
+    color: var(--ink-mute);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .meal-slot {
+    border-top: 1px dashed var(--line);
+    padding-top: 12px;
+    margin-bottom: 10px;
+  }
+  .meal-slot:last-child { margin-bottom: 0; }
+  .meal-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-mute);
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .meal-name {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .meal-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .prep-badge {
+    font-size: 10.5px;
+    color: var(--ink-soft);
+    background: var(--bg-soft);
+    padding: 2px 8px;
+    border-radius: 100px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    letter-spacing: 0.02em;
+  }
+  .prep-badge.fast {
+    background: rgba(168, 179, 119, 0.25);
+    color: #4a5527;
+  }
+  .tag-chip {
+    font-size: 10px;
+    background: var(--bg-soft);
+    padding: 2px 8px;
+    border-radius: 100px;
+    color: var(--ink-soft);
+  }
+
+  .shuffle-btn {
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    padding: 0;
+  }
+  .shuffle-btn:hover {
+    background: var(--terracotta);
+    color: var(--bg-card);
+    border-color: var(--terracotta);
+    transform: rotate(180deg);
+  }
+  .category-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+  .dot-fish { background: #4a7a98; }
+  .dot-legumes { background: var(--honey); }
+  .dot-groundMeat { background: var(--terracotta); }
+  .dot-chicken { background: var(--plum); }
+  .dot-vegetable { background: var(--olive); }
+  .dot-weekdayLunch { background: var(--ink-mute); }
+
+  /* SHOPPING */
+  .shopping-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 22px;
+  }
+  .shop-category {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 22px;
+  }
+  .shop-category h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-style: italic;
+    font-size: 18px;
+    margin-bottom: 14px;
+    color: var(--terracotta);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+  }
+  .shop-item {
+    display: flex;
+    align-items: center;
+    padding: 7px 0;
+    gap: 10px;
+    border-bottom: 1px dotted var(--line);
+    transition: opacity 0.2s ease;
+  }
+  .shop-item:last-child { border-bottom: none; }
+  .shop-item.checked { opacity: 0.45; }
+  .shop-item.checked .shop-name { text-decoration: line-through; }
+  .shop-item input[type="checkbox"] {
+    appearance: none;
+    width: 18px; height: 18px;
+    border: 1.5px solid var(--ink-mute);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.15s ease;
+  }
+  .shop-item input[type="checkbox"]:checked {
+    background: var(--olive);
+    border-color: var(--olive);
+  }
+  .shop-item input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .shop-name { flex: 1; font-size: 14px; }
+  .shop-amount {
+    font-size: 12px;
+    color: var(--ink-soft);
+    background: var(--bg-soft);
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 36, 32, 0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    backdrop-filter: blur(3px);
+  }
+  .modal-overlay.active { display: flex; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .modal {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    max-width: 720px;
+    width: 100%;
+    max-height: 88vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.3s cubic-bezier(0.2, 0.7, 0.3, 1);
+  }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  .modal-header {
+    padding: 28px 32px 18px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--bg-soft) 0%, transparent 100%);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    position: relative;
+  }
+  .modal-day {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ink-mute);
+    margin-bottom: 6px;
+  }
+  .modal-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .modal-meta-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+  .modal-side {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 300;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .modal-close {
+    position: absolute;
+    top: 22px; right: 22px;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--ink-soft);
+    transition: all 0.2s ease;
+  }
+  .modal-close:hover {
+    background: var(--ink);
+    color: var(--bg);
+    border-color: var(--ink);
+  }
+
+  .modal-body { padding: 24px 32px 32px; }
+  .modal-section { margin-bottom: 24px; }
+  .modal-section:last-child { margin-bottom: 0; }
+  .section-label {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--terracotta);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  .tip-box {
+    background: linear-gradient(135deg, rgba(168, 179, 119, 0.12), rgba(200, 152, 85, 0.1));
+    border-left: 3px solid var(--olive);
+    padding: 14px 18px;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink);
+  }
+
+  .ingredients-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 18px;
+  }
+  @media (max-width: 540px) {
+    .ingredients-list { grid-template-columns: 1fr; }
+  }
+  .ingredient {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px dotted var(--line);
+    font-size: 14px;
+  }
+  .ingredient .qty {
+    color: var(--ink-soft);
+    font-weight: 500;
+  }
+
+  .recipe-list {
+    list-style: none;
+    counter-reset: step;
+  }
+  .recipe-list li {
+    counter-increment: step;
+    padding: 12px 0 12px 38px;
+    position: relative;
+    border-bottom: 1px dashed var(--line);
+    line-height: 1.6;
+    font-size: 14.5px;
+  }
+  .recipe-list li:last-child { border-bottom: none; }
+  .recipe-list li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0; top: 12px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 18px;
+    color: var(--terracotta);
+    width: 28px;
+    text-align: center;
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .btn {
+    padding: 11px 20px;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+    background: var(--bg-card);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 13.5px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.01em;
+  }
+  .btn:hover { background: var(--bg-soft); }
+  .btn.primary {
+    background: var(--terracotta);
+    color: white;
+    border-color: var(--terracotta);
+  }
+  .btn.primary:hover {
+    background: #a84d2e;
+    transform: translateY(-1px);
+  }
+  .btn.olive {
+    background: var(--olive);
+    color: white;
+    border-color: var(--olive);
+  }
+  .btn.olive:hover {
+    background: #58662f;
+    transform: translateY(-1px);
+  }
+
+  /* TIP STRIP */
+  .tip-strip {
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px 22px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+    box-shadow: var(--shadow-sm);
+  }
+  .tip-strip .tip-icon {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 22px;
+    color: var(--olive);
+    line-height: 1;
+  }
+  .tip-strip .tip-text { flex: 1; line-height: 1.5; }
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 24px;
+    font-size: 12px;
+    color: var(--ink-soft);
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg-soft); }
+  ::-webkit-scrollbar-thumb { background: var(--ink-mute); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">
+      <div class="logo">Sofra.</div>
+      <div class="tag">haftalık menü &amp; alışveriş</div>
+    </div>
+    <div class="week-info">
+      <span class="season-badge" id="seasonBadge">İlkbahar</span>
+      <span class="pill" id="weekLabel">Bu hafta</span>
+      <button id="addMealBtn" class="btn-add">+ Yemek ekle</button>
+      <button id="newWeekBtn">Yeni hafta planla</button>
+    </div>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="menu">Haftalık Menü</button>
+    <button class="tab-btn" data-tab="shopping">Alışveriş Listesi</button>
+  </div>
+
+  <div id="menu-tab" class="tab-pane">
+    <div class="tip-strip" id="tipStrip">
+      <span class="tip-icon">✦</span>
+      <span class="tip-text" id="tipText"></span>
+    </div>
+
+    <div class="legend">
+      <span class="legend-item"><span class="category-dot dot-fish"></span> Balık</span>
+      <span class="legend-item"><span class="category-dot dot-legumes"></span> Bakliyat</span>
+      <span class="legend-item"><span class="category-dot dot-groundMeat"></span> Kıyma</span>
+      <span class="legend-item"><span class="category-dot dot-chicken"></span> Tavuk</span>
+      <span class="legend-item"><span class="category-dot dot-vegetable"></span> Sebze</span>
+    </div>
+
+    <div class="week-grid" id="weekGrid"></div>
+  </div>
+
+  <div id="shopping-tab" class="tab-pane" style="display:none;">
+    <div class="shopping-grid" id="shoppingGrid"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-day" id="modalDay"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <div class="modal-meta-row">
+        <span class="prep-badge" id="modalPrep"></span>
+        <span class="modal-side" id="modalSide"></span>
+      </div>
+      <button class="modal-close" id="modalClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section" id="tipSection">
+        <div class="section-label">İpucu</div>
+        <div class="tip-box" id="modalTip"></div>
+      </div>
+      <div class="modal-section">
+        <div class="section-label">Malzemeler</div>
+        <div class="ingredients-list" id="modalIngredients"></div>
+      </div>
+      <div class="modal-section" id="recipeSection" style="display:none;">
+        <div class="section-label">Tarif</div>
+        <ol class="recipe-list" id="modalRecipe"></ol>
+      </div>
+      <div class="modal-actions">
+        <button class="btn primary" id="shuffleMealBtn">↻ Yemeği değiştir</button>
+        <button class="btn olive" id="getRecipeBtn">📜 Tarifi göster</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-day">Yeni tarif</div>
+      <h2 class="modal-title">Yemek ekle</h2>
+      <div class="modal-meta-row">
+        <span class="modal-side">havuza eklenir, otomatik kullanılır</span>
+      </div>
+      <button class="modal-close" id="addModalClose">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-error" id="formError"></div>
+      <div class="form-success" id="formSuccess"></div>
+
+      <div class="form-grid">
+        <div class="form-field full">
+          <label>Yemek adı *</label>
+          <input type="text" id="f-name" placeholder="Portakal Soslu Somon" />
+        </div>
+
+        <div class="form-field">
+          <label>Kategori *</label>
+          <select id="f-category">
+            <option value="fish">Balık</option>
+            <option value="legumes">Bakliyat</option>
+            <option value="groundMeat">Kıyma</option>
+            <option value="chicken">Tavuk</option>
+            <option value="vegetable">Sebze</option>
+            <option value="weekdayLunch">Haftaiçi öğle (15dk)</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>Mevsim</label>
+          <select id="f-season">
+            <option value="all">Yıl boyu</option>
+            <option value="spring">İlkbahar</option>
+            <option value="summer">Yaz</option>
+            <option value="autumn">Sonbahar</option>
+            <option value="winter">Kış</option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label>Hazırlık süresi (dk) *</label>
+          <input type="number" id="f-prep" min="5" max="180" placeholder="35" />
+        </div>
+
+        <div class="form-field">
+          <label>Eşlikçi / yan</label>
+          <input type="text" id="f-side" placeholder="Pirinç pilavı + salata" />
+        </div>
+
+        <div class="form-field full">
+          <label>Malzemeler *</label>
+          <textarea id="f-ingredients" placeholder="Her satıra bir malzeme. Örn: 450 g somon fileto / 2 adet portakal / 1 yemek kaşığı bal"></textarea>
+          <span class="hint">Format: <strong>miktar birim isim</strong>. Birim yoksa "adet" varsayılır. Tanınan birimler: g, kg, ml, l, adet, demet, diş, su bardağı, çay kaşığı, yemek kaşığı, çimdik, kutu, dilim, dal.</span>
+        </div>
+
+        <div class="form-field full">
+          <label>Tarif (her satır bir adım) *</label>
+          <textarea id="f-recipe" placeholder="Her satır bir adım. Örn: Somonu zeytinyağı ile ovala. / Sosu karıştır. / 200°C fırında 12 dk pişir."></textarea>
+        </div>
+
+        <div class="form-field full">
+          <label>İpucu (opsiyonel)</label>
+          <textarea id="f-tip" placeholder="Portakaldaki C vitamini somondaki demir emilimini artırır." style="min-height: 60px;"></textarea>
+        </div>
+      </div>
+
+      <div class="backup-hint">
+        <span>💾</span>
+        <div>
+          <strong id="customCount">0 custom yemek</strong> · Her 5 yemekte bir otomatik JSON yedeği indirilir.
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn primary" id="saveMealBtn">Yemeği kaydet</button>
+        <button class="btn olive" id="exportNowBtn">↓ Şimdi yedekle</button>
+        <button class="btn" id="cancelAddBtn">İptal</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// Yemek havuzu — mevsim, hazırlık süresi ve aktif filtreleme ile
+// season: 'all' (yıl boyu), 'spring' (Mar-May), 'summer' (Haz-Ağu), 'autumn' (Eyl-Kas), 'winter' (Ara-Şub)
+//   ya da array: ['spring', 'summer'] gibi
+// prepTime: dakika cinsinden TOPLAM hazırlık + pişirme süresi
+
+const MEAL_DATABASE = {
+  // ============ BALIK ============
+  fish: [
+    {
+      id: 'somon-firin-teriyaki',
+      name: 'Fırında Teriyaki Somon',
+      category: 'fish',
+      season: 'all',
+      prepTime: 30,
+      tags: ['omega-3', 'pratik'],
+      side: 'Buharda kuşkonmaz ve jasmin pirinç',
+      tip: 'Kuşkonmazdaki folat ve C vitamini, somondaki demirin emilimini artırır. Mayıs Spargel sezonunun zirvesi!',
+      ingredients: [
+        { name: 'Somon fileto', amount: 450, unit: 'g' },
+        { name: 'Soya sosu (az tuzlu)', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Bal', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Zencefil (taze, rendelenmiş)', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Susam yağı', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Yeşil kuşkonmaz', amount: 400, unit: 'g' },
+        { name: 'Jasmin pirinç', amount: 1, unit: 'su bardağı' },
+        { name: 'Susam', amount: 1, unit: 'yemek kaşığı' },
+      ],
+      recipe: [
+        'Pirinci yıkayıp 1.5 bardak suyla pişir (12-15 dk).',
+        'Soya, bal, zencefil, sarımsak ve susam yağını karıştır.',
+        'Somonu sosa bula, 200°C fırında 12-14 dk pişir.',
+        'Kuşkonmazı sap kısmından kır, az zeytinyağıyla 5-6 dk sotele.',
+        'Üzerine susam serperek servis et.'
+      ]
+    },
+    {
+      id: 'somon-firin-limon',
+      name: 'Limonlu Otlu Fırın Somon',
+      category: 'fish',
+      season: 'all',
+      prepTime: 35,
+      tags: ['omega-3', 'çocuk dostu'],
+      side: 'Tatlı patates püresi ve kuşkonmaz',
+      tip: 'Tatlı patatesteki beta-karoten yağ ile birlikte daha iyi emilir; somonun yağı bu emilimi artırır.',
+      ingredients: [
+        { name: 'Somon fileto', amount: 450, unit: 'g' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Taze dereotu', amount: 0.5, unit: 'demet' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Tatlı patates', amount: 600, unit: 'g' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+        { name: 'Yeşil kuşkonmaz', amount: 300, unit: 'g' },
+      ],
+      recipe: [
+        'Tatlı patatesleri küp doğrayıp 15 dk haşla.',
+        'Somonu fırın kağıdına koy, üzerine zeytinyağı, sarımsak, limon, otlar.',
+        '200°C fırında 12-14 dk pişir.',
+        'Patatesleri tereyağı ile ezerek püre yap.',
+        'Kuşkonmazı 4-5 dk buharda pişir.'
+      ]
+    },
+    {
+      id: 'somon-firin-bahar',
+      name: 'Bahar Sebzeli Fırın Somon',
+      category: 'fish',
+      season: ['spring', 'summer'],
+      prepTime: 35,
+      tags: ['omega-3', 'tek tepside'],
+      side: 'Bulgur pilavı',
+      tip: 'Tek tepside, bahar sebzeleriyle pratik bir öğün. Limonlu sos demir emilimini artırır.',
+      ingredients: [
+        { name: 'Somon fileto', amount: 450, unit: 'g' },
+        { name: 'Yeşil kuşkonmaz', amount: 250, unit: 'g' },
+        { name: 'Kabak', amount: 1, unit: 'adet' },
+        { name: 'Cherry domates', amount: 250, unit: 'g' },
+        { name: 'Kırmızı soğan', amount: 1, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Kekik (kuru)', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Bulgur (pilavlık)', amount: 1, unit: 'su bardağı' },
+        { name: 'Tereyağı', amount: 15, unit: 'g' },
+      ],
+      recipe: [
+        'Sebzeleri irice doğra, zeytinyağı + kekik ile tepsiye yay.',
+        '200°C fırında 12 dk pişir.',
+        'Üzerine somonu, limon dilimleri ile yerleştir, 12-14 dk daha pişir.',
+        'Bulguru tereyağında kavur, 2 bardak sıcak su, 15 dk pişir.'
+      ]
+    },
+    {
+      id: 'somon-tavada',
+      name: 'Tavada Somon ve Ispanak',
+      category: 'fish',
+      season: ['spring', 'autumn', 'winter'],
+      prepTime: 20,
+      tags: ['omega-3', 'demir', 'hızlı'],
+      side: 'Limonlu sotelenmiş ıspanak + bulgur',
+      tip: 'Ispanak demir kaynağı; somonun yağıyla birlikte limon eklemek demir emilimini katlıyor. 20 dk tek tavada.',
+      ingredients: [
+        { name: 'Somon fileto', amount: 450, unit: 'g' },
+        { name: 'Taze ıspanak', amount: 400, unit: 'g' },
+        { name: 'Sarımsak', amount: 3, unit: 'diş' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+        { name: 'Bulgur (pilavlık)', amount: 1, unit: 'su bardağı' },
+      ],
+      recipe: [
+        'Bulguru tereyağında kavur, 2 bardak sıcak su, 15 dk pişir.',
+        'Somonu tuzla, derili tarafını tavada zeytinyağıyla 4 dk kızart, çevir 3 dk daha pişir.',
+        'Aynı tavada sarımsağı kavur, ıspanağı ekleyip soldur.',
+        'Üzerine limon sıkarak servis et.'
+      ]
+    },
+  ],
+
+  // ============ BAKLİYAT ============
+  legumes: [
+    {
+      id: 'mercimek-kofte-marul',
+      name: 'Mercimek Köfte ve Marul Sarma',
+      category: 'legumes',
+      season: 'all',
+      prepTime: 35,
+      tags: ['demir', 'lif', 'çocuk dostu'],
+      side: 'Marul yatağı, limon, taze soğan',
+      tip: 'Mercimek köfte marula sarılınca çocuklar parmaklarıyla yiyebilir. Limon C vitamini için demir emilimini artırır.',
+      ingredients: [
+        { name: 'Kırmızı mercimek', amount: 1.5, unit: 'su bardağı' },
+        { name: 'İnce bulgur', amount: 1, unit: 'su bardağı' },
+        { name: 'Soğan', amount: 2, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Biber salçası', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Maydanoz', amount: 1, unit: 'demet' },
+        { name: 'Taze soğan', amount: 4, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Marul', amount: 1, unit: 'adet' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Mercimeği 3 bardak suda haşla (15-20 dk).',
+        'Bulguru üzerine ekle, kapağı kapat 15 dk dinlendir.',
+        'Soğanı kavur, salçaları 2 dk çevir, mercimek karışımına ekle.',
+        'Otları, kimyonu ekle, yoğur. Köfte şekli ver.',
+        'Marul yaprakları, limon ile servis et.'
+      ]
+    },
+    {
+      id: 'nohut-yemek',
+      name: 'Etli Nohut Yemeği',
+      category: 'legumes',
+      season: 'all',
+      prepTime: 60,
+      tags: ['demir', 'çinko', 'protein'],
+      side: 'Pirinç pilavı',
+      tip: 'Bitkisel demir, az miktar et ile birlikte daha iyi emilir. Pratiklik için akşamdan nohutu ıslat.',
+      ingredients: [
+        { name: 'Nohut (kuru, ıslatılmış)', amount: 2, unit: 'su bardağı' },
+        { name: 'Kuşbaşı dana eti', amount: 250, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet (büyük)' },
+        { name: 'Domates', amount: 2, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Pirinç', amount: 1, unit: 'su bardağı' },
+      ],
+      recipe: [
+        'Nohutları haşla (40 dk) — düdüklüde 15 dk.',
+        'Soğanı tereyağı + zeytinyağında kavur, eti ekle.',
+        'Domates ve salçayı ekle, 5 dk kavur.',
+        'Nohutları ve 3 bardak suyu ekle, 25 dk pişir.',
+        'Pilavı paralel pişir.'
+      ]
+    },
+    {
+      id: 'kuru-fasulye',
+      name: 'Etli Kuru Fasulye',
+      category: 'legumes',
+      season: 'all',
+      prepTime: 60,
+      tags: ['demir', 'protein'],
+      side: 'Pirinç pilavı + havuç salatası',
+      tip: 'Klasik fasulye-pilav tam protein. Yanında havuç salatası C vitamini için.',
+      ingredients: [
+        { name: 'Kuru fasulye (ıslatılmış)', amount: 2, unit: 'su bardağı' },
+        { name: 'Kuşbaşı et', amount: 200, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Biber salçası', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Pirinç', amount: 1, unit: 'su bardağı' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Fasulyeyi düdüklüde 25 dk haşla.',
+        'Soğanı tereyağı + zeytinyağında kavur, eti ekle.',
+        'Salçaları, fasulyeyi ve sıcak suyu ekle, 20 dk daha pişir.',
+        'Havuçları rendele, limon + zeytinyağıyla salata yap.',
+        'Pilavı paralel hazırla.'
+      ]
+    },
+    {
+      id: 'mercimek-corba-mucver',
+      name: 'Yeşil Mercimek Çorbası ve Mücver',
+      category: 'legumes',
+      season: ['spring', 'summer', 'autumn'],
+      prepTime: 45,
+      tags: ['demir', 'lif'],
+      side: 'Mücver + sarımsaklı yoğurt',
+      tip: 'Yeşil mercimek demir bakımından zengin, mücverdeki peynir ve yumurta proteini tamamlar. Limonla servis demir emilimini artırır.',
+      ingredients: [
+        { name: 'Yeşil mercimek', amount: 1, unit: 'su bardağı' },
+        { name: 'Arpa şehriye', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Havuç', amount: 1, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Kabak', amount: 3, unit: 'adet' },
+        { name: 'Yumurta', amount: 2, unit: 'adet' },
+        { name: 'Un', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Beyaz peynir', amount: 100, unit: 'g' },
+        { name: 'Dereotu', amount: 0.5, unit: 'demet' },
+        { name: 'Taze soğan', amount: 3, unit: 'adet' },
+        { name: 'Yoğurt', amount: 300, unit: 'g' },
+        { name: 'Sarımsak', amount: 1, unit: 'diş' },
+      ],
+      recipe: [
+        'Mercimeği önceden ıslatmadıysan düdüklüde 20 dk haşla.',
+        'Çorba: soğan + havucu kavur, salça ekle, mercimek + 5 bardak su, 15 dk pişir, şehriye ekle 8 dk.',
+        'Mücver: kabakları rendele, tuzla bekletip sık. Yumurta, un, peynir, otları ekle.',
+        'Az yağda 3-4 dakika her iki tarafını kızart.',
+        'Sarımsaklı yoğurt + limon ile servis.'
+      ]
+    },
+  ],
+
+  // ============ KIYMA ============
+  groundMeat: [
+    {
+      id: 'kofte-firin',
+      name: 'Fırında Köfte ve Patates',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 45,
+      tags: ['demir', 'B12', 'çocuk dostu'],
+      side: 'Fırın patates ve havuç + cacık',
+      tip: 'Kıymadaki hem-demir, B12 ve çinko çocuk gelişimi için kritik. C vitamini için yanında domates dilimi.',
+      ingredients: [
+        { name: 'Dana kıyma', amount: 500, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Galeta unu', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Yumurta', amount: 1, unit: 'adet' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Patates', amount: 4, unit: 'adet' },
+        { name: 'Havuç', amount: 3, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Yoğurt', amount: 300, unit: 'g' },
+        { name: 'Salatalık', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Kıymayı rendelenmiş soğan, sarımsak, galeta unu, yumurta ve maydanozla yoğur.',
+        'Patates + havuçları irice doğra, zeytinyağıyla tepsiye yay.',
+        'Köftelere şekil ver, sebzelerin üzerine koy.',
+        '200°C fırında 25-30 dk pişir.',
+        'Cacık: yoğurt + rendelenmiş salatalık.'
+      ]
+    },
+    {
+      id: 'kiymali-gul-boregi',
+      name: 'Kıymalı Gül Böreği',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 50,
+      tags: ['çocuk dostu'],
+      side: 'Mercimek çorbası + roka salatası',
+      tip: 'Roka folat ve C vitamini açısından zengin; demir emilimini destekler.',
+      ingredients: [
+        { name: 'Yufka', amount: 4, unit: 'adet' },
+        { name: 'Dana kıyma', amount: 300, unit: 'g' },
+        { name: 'Soğan', amount: 2, unit: 'adet' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Yumurta', amount: 1, unit: 'adet' },
+        { name: 'Süt', amount: 100, unit: 'ml' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Susam', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Çörek otu', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Roka', amount: 1, unit: 'demet' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Kırmızı mercimek', amount: 1, unit: 'su bardağı' },
+        { name: 'Havuç', amount: 1, unit: 'adet' },
+        { name: 'Patates', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Kıyma + soğanı tavada kavur, suyunu çek. Maydanoz ekle, soğut.',
+        'Yufkayı dörde böl, harç koy, gül şekli ver.',
+        'Üzerine yumurta + süt sür, susam + çörek otu serp.',
+        '180°C fırında 25 dk pişir.',
+        'Çorba: mercimek + sebzeleri 4 bardak suda 25 dk haşla, blendırla.',
+        'Salata: roka + limon + zeytinyağı.'
+      ]
+    },
+    {
+      id: 'firin-makarna',
+      name: 'Kıymalı Beşamel Soslu Fırın Makarna',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 45,
+      tags: ['çocuk dostu', 'kalsiyum'],
+      side: 'Mevsim salatası',
+      tip: 'Yanında C vitamini için marul + domates salata, demir emilimini destekler.',
+      ingredients: [
+        { name: 'Makarna (penne)', amount: 400, unit: 'g' },
+        { name: 'Dana kıyma', amount: 350, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Domates', amount: 3, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 50, unit: 'g' },
+        { name: 'Un', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Süt', amount: 600, unit: 'ml' },
+        { name: 'Muskat', amount: 1, unit: 'çimdik' },
+        { name: 'Kaşar peyniri (rendelenmiş)', amount: 200, unit: 'g' },
+        { name: 'Marul', amount: 1, unit: 'adet' },
+        { name: 'Salatalık', amount: 2, unit: 'adet' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Makarnayı al dente haşla.',
+        'Soğan + sarımsağı kavur, kıymayı ekle, domates + salça, 8 dk pişir.',
+        'Beşamel: tereyağında unu kavur, sütü ekleyerek karıştır, muskat at.',
+        'Kabaya makarna + kıyma + beşamel + kaşar.',
+        '200°C fırında 20 dk pişir.',
+        'Salata yap.'
+      ]
+    },
+    {
+      id: 'eksili-kofte',
+      name: 'Ekşili Köfte (Sebzeli)',
+      category: 'groundMeat',
+      season: 'all',
+      prepTime: 45,
+      tags: ['demir', 'C vitamini'],
+      side: 'Bulgur pilavı',
+      tip: 'Limonlu sos, kıymadaki demirin emilimini artırır. Klasik Anadolu lezzeti.',
+      ingredients: [
+        { name: 'Dana kıyma', amount: 400, unit: 'g' },
+        { name: 'Pirinç', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Kimyon', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Patates', amount: 2, unit: 'adet' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Kereviz sapı', amount: 2, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Limon', amount: 2, unit: 'adet' },
+        { name: 'Yumurta', amount: 1, unit: 'adet (sarısı)' },
+        { name: 'Bulgur (pilavlık)', amount: 1, unit: 'su bardağı' },
+      ],
+      recipe: [
+        'Kıyma + pirinç + soğan + maydanoz + kimyon yoğur, ceviz boyu köfteler yap.',
+        'Sebzeleri küp doğra, tereyağında 5 dk kavur. Salçayı ekle.',
+        '4 bardak sıcak su + köfteleri ekle, 25 dk pişir.',
+        'Servis öncesi: yumurta sarısı + 2 limon suyunu çırp, az tencere suyu ile yavaş yedir.',
+        'Bulguru paralel pişir.'
+      ]
+    },
+    {
+      id: 'kiymali-pirincli-kabak',
+      name: 'Kıymalı Kabak Dolması (Bahar)',
+      category: 'groundMeat',
+      season: ['spring', 'summer'],
+      prepTime: 50,
+      tags: ['demir', 'lif'],
+      side: 'Yoğurt',
+      tip: 'Bahar kabağı en bol bulunduğu zaman. Pirinç + kıyma çocuk için kolay yenir, lifli ve dengeli.',
+      ingredients: [
+        { name: 'Kabak (orta boy)', amount: 4, unit: 'adet' },
+        { name: 'Dana kıyma', amount: 300, unit: 'g' },
+        { name: 'Pirinç', amount: 0.5, unit: 'su bardağı' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Domates', amount: 2, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Dereotu', amount: 0.5, unit: 'demet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Yoğurt', amount: 300, unit: 'g' },
+        { name: 'Sarımsak', amount: 1, unit: 'diş' },
+      ],
+      recipe: [
+        'Kabakların içini oy, içlerini sebze suyuna at.',
+        'Kıyma + soğan + pirinç + salça + ot + tuzla harcı yoğur.',
+        'Kabakları doldur, tencereye diz, üzerine doğranmış domates.',
+        '2 bardak sıcak su + tereyağı, kısık ateşte 35-40 dk pişir.',
+        'Sarımsaklı yoğurt + limonla servis.'
+      ]
+    },
+  ],
+
+  // ============ TAVUK ============
+  chicken: [
+    {
+      id: 'tavuk-firin-bahar',
+      name: 'Limonlu Otlu Fırın Tavuk Budu',
+      category: 'chicken',
+      season: 'all',
+      prepTime: 45,
+      tags: ['protein', 'tek tepside'],
+      side: 'Bulgur pilavı + yeşil salata',
+      tip: 'Tavuğun yağında pişen sebzeler hem aromalı hem besleyici olur.',
+      ingredients: [
+        { name: 'Tavuk budu (kemikli)', amount: 6, unit: 'adet' },
+        { name: 'Patates', amount: 4, unit: 'adet' },
+        { name: 'Havuç', amount: 3, unit: 'adet' },
+        { name: 'Soğan', amount: 2, unit: 'adet' },
+        { name: 'Sarımsak', amount: 4, unit: 'diş' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Kekik (kuru)', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Biberiye', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Bulgur (pilavlık)', amount: 1, unit: 'su bardağı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+      ],
+      recipe: [
+        'Tavukları zeytinyağı, limon, otlar, sarımsakla 30 dk marine et.',
+        'Sebzeleri irice doğra, tepsiye yay.',
+        'Tavukları üzerine koy, marine sosunu da dök.',
+        '200°C fırında 50 dk pişir.',
+        'Bulguru paralel pişir.'
+      ]
+    },
+    {
+      id: 'tavuk-pirzola-firin',
+      name: 'Sumaklı Yoğurtlu Fırın Tavuk',
+      category: 'chicken',
+      season: 'all',
+      prepTime: 35,
+      tags: ['protein'],
+      side: 'Bulgur pilavı + çoban salata',
+      tip: 'Sumak hem lezzet hem demir emilimi için faydalı (C vit etkisi).',
+      ingredients: [
+        { name: 'Tavuk göğüs (fileto)', amount: 600, unit: 'g' },
+        { name: 'Yoğurt', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Sumak', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Bulgur (pilavlık)', amount: 1.5, unit: 'su bardağı' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 25, unit: 'g' },
+        { name: 'Domates', amount: 3, unit: 'adet' },
+        { name: 'Salatalık', amount: 2, unit: 'adet' },
+        { name: 'Yeşil biber', amount: 1, unit: 'adet' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+      ],
+      recipe: [
+        'Tavukları yoğurt + sumak + sarımsak + limonla 20 dk marine et.',
+        '200°C fırında 20-25 dk pişir.',
+        'Bulgur pilavı: soğanı tereyağında kavur, salça + bulgur + 3 bardak su, 15 dk.',
+        'Çoban salata yap.'
+      ]
+    },
+    {
+      id: 'tavuk-tava-soslu',
+      name: 'Hızlı Tavuk Tava (Soya-Limon)',
+      category: 'chicken',
+      season: 'all',
+      prepTime: 25,
+      tags: ['protein', 'hızlı'],
+      side: 'Pirinç + buharda kuşkonmaz',
+      tip: '25 dakikada hazır, tek tavada. Çocuk için hafif tatlı bir sos.',
+      ingredients: [
+        { name: 'Tavuk göğüs (fileto)', amount: 500, unit: 'g' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Soya sosu (az tuzlu)', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Bal', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 15, unit: 'g' },
+        { name: 'Pirinç', amount: 1, unit: 'su bardağı' },
+        { name: 'Yeşil kuşkonmaz', amount: 300, unit: 'g' },
+      ],
+      recipe: [
+        'Pirinci pişir.',
+        'Tavukları küp doğra, tavada zeytinyağıyla 5-6 dk kızart.',
+        'Sarımsak + soya + bal + limon karışımını ekle, 2 dk karıştırarak pişir.',
+        'Kuşkonmazı ayrı tavada tereyağıyla 5 dk sotele.'
+      ]
+    },
+  ],
+
+  // ============ SEBZE ============
+  vegetable: [
+    {
+      id: 'zeytinyagli-taze-fasulye',
+      name: 'Zeytinyağlı Taze Fasulye',
+      category: 'vegetable',
+      season: 'all',
+      prepTime: 50,
+      tags: ['lif', 'C vitamini'],
+      side: 'Pirinç pilavı + beyaz peynir + ekmek',
+      tip: 'Klasik zeytinyağlı yemek. Beyaz peynir ile servis ettiğinde proteini tamamlar; limon C vitamini sağlar.',
+      ingredients: [
+        { name: 'Taze fasulye (taze veya donmuş)', amount: 600, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Domates', amount: 2, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Domates salçası', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Zeytinyağı', amount: 5, unit: 'yemek kaşığı' },
+        { name: 'Toz şeker', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Pirinç', amount: 1, unit: 'su bardağı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+        { name: 'Beyaz peynir', amount: 200, unit: 'g' },
+        { name: 'Tahıl ekmek', amount: 1, unit: 'adet' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Soğan + sarımsağı zeytinyağında kavur, domates + salça ekle.',
+        'Fasulyeyi ekle, 1 bardak sıcak su + tuz + şeker, 35-40 dk pişir.',
+        'Pilavı tereyağında kavurup pişir.',
+        'Yanında beyaz peynir + ekmek + limon ile servis et.'
+      ]
+    },
+    {
+      id: 'mucver-mercimek',
+      name: 'Mücver ve Mercimek Çorbası',
+      category: 'vegetable',
+      season: 'all',
+      prepTime: 35,
+      tags: ['lif', 'demir', 'protein'],
+      side: 'Mercimek çorbası + sarımsaklı yoğurt',
+      tip: 'Yeşillik bol mücver + mercimek çorbası dengeli ve hafif. Mercimekteki demirin emilimi için yoğurttan en az 1 saat ayrı tüketmek ideal.',
+      ingredients: [
+        { name: 'Kabak', amount: 4, unit: 'adet' },
+        { name: 'Yumurta', amount: 3, unit: 'adet' },
+        { name: 'Un', amount: 5, unit: 'yemek kaşığı' },
+        { name: 'Beyaz peynir', amount: 150, unit: 'g' },
+        { name: 'Dereotu', amount: 1, unit: 'demet' },
+        { name: 'Maydanoz', amount: 0.5, unit: 'demet' },
+        { name: 'Taze soğan', amount: 4, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Yoğurt', amount: 300, unit: 'g' },
+        { name: 'Sarımsak', amount: 1, unit: 'diş' },
+        { name: 'Kırmızı mercimek', amount: 1, unit: 'su bardağı' },
+        { name: 'Patates', amount: 1, unit: 'adet' },
+        { name: 'Havuç', amount: 1, unit: 'adet' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Kabakları rendele, tuzla bekletip sık.',
+        'Yumurta + un + peynir + otları ekle, karıştır.',
+        'Az yağda iki tarafını kızart.',
+        'Çorba: mercimek + sebzeleri 4 bardak suda 25 dk haşla, blendırla.',
+        'Limonla servis et.'
+      ]
+    },
+    {
+      id: 'zeytinyagli-bezelye',
+      name: 'Zeytinyağlı Bezelye + Pirinç',
+      category: 'vegetable',
+      season: 'all',
+      prepTime: 35,
+      tags: ['lif', 'C vitamini'],
+      side: 'Pirinç pilavı + feta peyniri',
+      tip: 'Bezelye protein ve folat kaynağı. Feta peyniri kalsiyum ve protein ekler. Donmuş bezelye yıl boyu kullanılabilir.',
+      ingredients: [
+        { name: 'Bezelye (taze veya donmuş)', amount: 500, unit: 'g' },
+        { name: 'Havuç', amount: 2, unit: 'adet' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Patates', amount: 2, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 5, unit: 'yemek kaşığı' },
+        { name: 'Toz şeker', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Dereotu', amount: 0.5, unit: 'demet' },
+        { name: 'Pirinç', amount: 1, unit: 'su bardağı' },
+        { name: 'Tereyağı', amount: 20, unit: 'g' },
+        { name: 'Feta peyniri', amount: 200, unit: 'g' },
+      ],
+      recipe: [
+        'Soğanı zeytinyağında kavur, doğranmış havuç + patatesi 5 dk soldur.',
+        'Bezelyeyi ekle, 1 bardak sıcak su, tuz, şeker, 20 dk pişir.',
+        'Limon + dereotuyla soğutarak servis et.',
+        'Pilavı paralel yap, üzerine ufalanmış feta serp.'
+      ]
+    },
+    {
+      id: 'ispanakli-makarna',
+      name: 'Ricottalı Ispanaklı Makarna',
+      category: 'vegetable',
+      season: 'all',
+      prepTime: 25,
+      tags: ['kalsiyum', 'demir', 'hızlı'],
+      side: 'Yanında parmesan ve cherry domates',
+      tip: 'Ricotta + parmesan kalsiyum, ıspanak demir verir. Limonlu sos demir emilimini destekler. 25 dakikada hazır.',
+      ingredients: [
+        { name: 'Tagliatelle veya fettuccine', amount: 400, unit: 'g' },
+        { name: 'Taze ıspanak', amount: 400, unit: 'g' },
+        { name: 'Sarımsak', amount: 3, unit: 'diş' },
+        { name: 'Ricotta peyniri', amount: 250, unit: 'g' },
+        { name: 'Parmesan (rendelenmiş)', amount: 80, unit: 'g' },
+        { name: 'Tereyağı', amount: 40, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Cherry domates', amount: 200, unit: 'g' },
+        { name: 'Muskat', amount: 1, unit: 'çimdik' },
+      ],
+      recipe: [
+        'Makarnayı al dente haşla, suyundan 1 bardak ayır.',
+        'Tavada tereyağı + zeytinyağında sarımsağı 1 dk kavur.',
+        'Ispanağı ekle, soldurana kadar karıştır (3-4 dk).',
+        'Ricotta + biraz makarna suyu + muskat ile sosu kıvama getir.',
+        'Makarnayı sosa al, parmesan ve limon kabuğu rendesini ekle.',
+        'Yarıya kesilmiş cherry domateslerle servis et.'
+      ]
+    },
+    {
+      id: 'kuskonmaz-risotto',
+      name: 'Kuşkonmazlı Risotto (Bahar)',
+      category: 'vegetable',
+      season: 'spring',
+      prepTime: 40,
+      tags: ['lif', 'kalsiyum'],
+      side: 'Yeşil salata',
+      tip: 'Mayıs Spargel sezonunun en güzel yemeği. Parmesan kalsiyum, kuşkonmaz folat verir.',
+      ingredients: [
+        { name: 'Risotto pirinci (Arborio)', amount: 1.5, unit: 'su bardağı' },
+        { name: 'Yeşil kuşkonmaz', amount: 400, unit: 'g' },
+        { name: 'Soğan', amount: 1, unit: 'adet' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Tavuk veya sebze suyu', amount: 1, unit: 'l' },
+        { name: 'Tereyağı', amount: 50, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Parmesan (rendelenmiş)', amount: 80, unit: 'g' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Marul', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Suyu kaynar tut. Soğan + sarımsağı tereyağında kavur.',
+        'Pirinci ekle, şeffaflaşana kadar 2 dk kavur.',
+        'Sıcak suyu kepçe kepçe ekleyerek karıştır (18-20 dk).',
+        'Doğranmış kuşkonmazı son 8 dakikada ekle.',
+        'Parmesan + limon kabuğu rendesi, dinlendirip servis et.'
+      ]
+    },
+    {
+      id: 'kabak-firin-bahar',
+      name: 'Fırında Akdeniz Sebzeleri ve Bulgur',
+      category: 'vegetable',
+      season: ['spring', 'summer'],
+      prepTime: 45,
+      tags: ['lif', 'antioksidan'],
+      side: 'Bulgur pilavı + lor peyniri',
+      tip: 'Renkli sebzeler farklı antioksidanlar. Lor peyniri kalsiyum ve protein ekler.',
+      ingredients: [
+        { name: 'Kabak', amount: 2, unit: 'adet' },
+        { name: 'Kırmızı biber', amount: 2, unit: 'adet' },
+        { name: 'Cherry domates', amount: 250, unit: 'g' },
+        { name: 'Kırmızı soğan', amount: 1, unit: 'adet' },
+        { name: 'Sarımsak', amount: 4, unit: 'diş' },
+        { name: 'Zeytinyağı', amount: 5, unit: 'yemek kaşığı' },
+        { name: 'Kekik', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Bulgur (pilavlık)', amount: 1.5, unit: 'su bardağı' },
+        { name: 'Tereyağı', amount: 25, unit: 'g' },
+        { name: 'Domates salçası', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Lor peyniri', amount: 200, unit: 'g' },
+      ],
+      recipe: [
+        'Sebzeleri irice doğra, sarımsak + zeytinyağı + kekik + tuzla karıştır.',
+        '200°C fırında 30 dk pişir.',
+        'Bulgur: tereyağında salça + bulguru kavur, 3 bardak sıcak su, 15 dk.',
+        'Lor peynirini yanında servis et.'
+      ]
+    },
+  ],
+
+  // ============ HAFTAİÇİ ÖĞLE — 15 DK PRATİK ============
+  weekdayLunch: [
+    {
+      id: 'avokado-tost-somon',
+      name: 'Avokadolu & Füme Somonlu Tost',
+      category: 'weekdayLunch',
+      season: 'all',
+      prepTime: 10,
+      tags: ['omega-3', 'hızlı'],
+      side: '',
+      tip: 'Tam tahıl + avokado + füme somon = 10 dakikada doyurucu öğle.',
+      ingredients: [
+        { name: 'Tam tahıllı ekmek', amount: 4, unit: 'dilim' },
+        { name: 'Avokado', amount: 2, unit: 'adet' },
+        { name: 'Füme somon', amount: 150, unit: 'g' },
+        { name: 'Limon', amount: 0.5, unit: 'adet' },
+        { name: 'Kapari', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Kırmızı soğan', amount: 0.5, unit: 'adet' },
+        { name: 'Dereotu', amount: 0.25, unit: 'demet' },
+      ],
+      recipe: [
+        'Ekmekleri tostla.',
+        'Avokadoyu limon + tuz + karabiberle ez, üzerine sür.',
+        'Somon, ince soğan, kapari, dereotu koy.'
+      ]
+    },
+    {
+      id: 'tonbalik-makarna',
+      name: 'Ton Balıklı Limonlu Makarna',
+      category: 'weekdayLunch',
+      season: 'all',
+      prepTime: 15,
+      tags: ['protein', 'hızlı'],
+      side: '',
+      tip: '15 dakikada hızlı protein. Cherry domatesin C vitamini ton balığının demirini emdirir.',
+      ingredients: [
+        { name: 'Spagetti', amount: 250, unit: 'g' },
+        { name: 'Ton balığı (konserve)', amount: 2, unit: 'kutu' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Kapari', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Cherry domates', amount: 200, unit: 'g' },
+        { name: 'Maydanoz', amount: 0.25, unit: 'demet' },
+        { name: 'Zeytinyağı', amount: 4, unit: 'yemek kaşığı' },
+      ],
+      recipe: [
+        'Makarnayı haşla.',
+        'Sarımsağı zeytinyağında 1 dk kavur, ton + cherry domatesleri ekle.',
+        'Süzülmüş makarnayı, limon kabuğu rendesi + suyu, kapari ekle.',
+        'Maydanoz serperek servis et.'
+      ]
+    },
+    {
+      id: 'humus-bowl',
+      name: 'Humus Bowl (Hazır Falafelle)',
+      category: 'weekdayLunch',
+      season: 'all',
+      prepTime: 15,
+      tags: ['lif', 'demir', 'hızlı'],
+      side: '',
+      tip: 'Bitkisel demir + tahin (kalsiyum) + limon (C vitamini). Hazır humus + falafelle pratik.',
+      ingredients: [
+        { name: 'Hazır humus', amount: 250, unit: 'g' },
+        { name: 'Donmuş falafel', amount: 8, unit: 'adet' },
+        { name: 'Cherry domates', amount: 150, unit: 'g' },
+        { name: 'Salatalık', amount: 1, unit: 'adet' },
+        { name: 'Roka', amount: 1, unit: 'demet' },
+        { name: 'Tahin', amount: 2, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Pita ekmek', amount: 2, unit: 'adet' },
+      ],
+      recipe: [
+        'Falafelleri fırında 12 dk ısıt.',
+        'Tabağa humus, üstüne sebzeler + falafel + roka.',
+        'Tahin + limon + biraz su = sos.'
+      ]
+    },
+    {
+      id: 'kase-bulgur-feta',
+      name: 'Akdeniz Bulgur Kasesi (Feta)',
+      category: 'weekdayLunch',
+      season: 'all',
+      prepTime: 15,
+      tags: ['lif', 'pratik'],
+      side: '',
+      tip: 'Önceden bulgur pişirip dolapta tutarsan 5 dakikada hazır olur.',
+      ingredients: [
+        { name: 'Pişmiş bulgur', amount: 1.5, unit: 'su bardağı' },
+        { name: 'Feta peyniri', amount: 150, unit: 'g' },
+        { name: 'Siyah zeytin', amount: 100, unit: 'g' },
+        { name: 'Cherry domates', amount: 200, unit: 'g' },
+        { name: 'Salatalık', amount: 1, unit: 'adet' },
+        { name: 'Roka', amount: 0.5, unit: 'demet' },
+        { name: 'Maydanoz', amount: 0.25, unit: 'demet' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Sumak', amount: 1, unit: 'çay kaşığı' },
+      ],
+      recipe: [
+        'Sebzeleri doğra.',
+        'Bulgur + feta + zeytin + sebzeleri karıştır.',
+        'Limon + zeytinyağı + sumak ile soslayın.'
+      ]
+    },
+    {
+      id: 'somon-fume-poke',
+      name: 'Soya-Avokado Poke Bowl',
+      category: 'weekdayLunch',
+      season: 'all',
+      prepTime: 15,
+      tags: ['omega-3', 'hızlı'],
+      side: '',
+      tip: 'Edamame + somon = protein yüklü pratik öğle.',
+      ingredients: [
+        { name: 'Pirinç (jasmin)', amount: 1, unit: 'su bardağı' },
+        { name: 'Füme somon', amount: 200, unit: 'g' },
+        { name: 'Avokado', amount: 1, unit: 'adet' },
+        { name: 'Edamame (donmuş)', amount: 100, unit: 'g' },
+        { name: 'Salatalık', amount: 1, unit: 'adet' },
+        { name: 'Havuç', amount: 1, unit: 'adet' },
+        { name: 'Soya sosu', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Susam yağı', amount: 1, unit: 'çay kaşığı' },
+        { name: 'Susam', amount: 1, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+      ],
+      recipe: [
+        'Pirinci pişir (12 dk), edamameyi 3 dk haşla.',
+        'Sebzeleri ve avokadoyu doğra.',
+        'Kasede pirinç, üstüne her şey, sosla.'
+      ]
+    },
+    {
+      id: 'wrap-tavuk',
+      name: 'Tavuklu Sezar Wrap',
+      category: 'weekdayLunch',
+      season: 'all',
+      prepTime: 12,
+      tags: ['protein', 'hızlı'],
+      side: '',
+      tip: 'Akşamdan kalan tavuğu kullan, 12 dakikada hazır.',
+      ingredients: [
+        { name: 'Tam tahıllı dürüm ekmeği', amount: 4, unit: 'adet' },
+        { name: 'Pişmiş tavuk göğüs', amount: 300, unit: 'g' },
+        { name: 'Marul', amount: 1, unit: 'adet' },
+        { name: 'Domates', amount: 2, unit: 'adet' },
+        { name: 'Parmesan (rendelenmiş)', amount: 50, unit: 'g' },
+        { name: 'Yoğurt', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Limon', amount: 0.5, unit: 'adet' },
+        { name: 'Sarımsak', amount: 1, unit: 'diş' },
+      ],
+      recipe: [
+        'Yoğurt + limon + sarımsak + parmesan = sezar sosu.',
+        'Dürüme marul + tavuk + domates, sosu gez.',
+        'Sıkıca sar, ortadan kes.'
+      ]
+    },
+    {
+      id: 'corba-pesto-tost',
+      name: 'Pestolu Mozarella Tost & Hazır Domates Çorba',
+      category: 'weekdayLunch',
+      season: 'all',
+      prepTime: 12,
+      tags: ['konfor', 'hızlı'],
+      side: '',
+      tip: 'Hazır domates çorba + tostla 12 dakikada konforlu öğle.',
+      ingredients: [
+        { name: 'Hazır domates çorba', amount: 1, unit: 'kutu (500ml)' },
+        { name: 'Tam tahıllı ekmek', amount: 4, unit: 'dilim' },
+        { name: 'Mozarella peyniri', amount: 200, unit: 'g' },
+        { name: 'Pesto sos', amount: 4, unit: 'yemek kaşığı' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Fesleğen (taze)', amount: 0.25, unit: 'demet' },
+      ],
+      recipe: [
+        'Çorbayı ısıt.',
+        'Ekmeklere pesto + mozarella, tavada tereyağı ile her iki yüzü kızart.',
+        'Fesleğenle servis.'
+      ]
+    },
+    {
+      id: 'kuskonmaz-makarna',
+      name: 'Limonlu Kuşkonmaz Makarna (Bahar)',
+      category: 'weekdayLunch',
+      season: 'spring',
+      prepTime: 15,
+      tags: ['folat', 'hızlı'],
+      side: '',
+      tip: 'Mayıs Spargel sezonunun pratik öğle yemeği. Folat ve C vitamini açısından zengin.',
+      ingredients: [
+        { name: 'Tagliatelle veya spagetti', amount: 250, unit: 'g' },
+        { name: 'Yeşil kuşkonmaz', amount: 400, unit: 'g' },
+        { name: 'Sarımsak', amount: 2, unit: 'diş' },
+        { name: 'Limon', amount: 1, unit: 'adet' },
+        { name: 'Parmesan (rendelenmiş)', amount: 60, unit: 'g' },
+        { name: 'Tereyağı', amount: 30, unit: 'g' },
+        { name: 'Zeytinyağı', amount: 3, unit: 'yemek kaşığı' },
+        { name: 'Karabiber', amount: 1, unit: 'çimdik' },
+      ],
+      recipe: [
+        'Makarnayı haşla, suyundan 1 bardak ayır.',
+        'Kuşkonmazı 4cm parçalara doğra, tavada zeytinyağıyla 4 dk sotele.',
+        'Sarımsağı ekle, 30 saniye kavur.',
+        'Süzülmüş makarna + tereyağı + biraz haşlama suyu, karıştır.',
+        'Limon kabuğu rendesi + suyu + parmesan, karabiberle servis et.'
+      ]
+    },
+  ],
+};
+
+// İpuçları havuzu
+const NUTRITION_TIPS = [
+  'Demir emilimi için: kıymalı/balıklı yemeklerin yanına C vitamini içeren limon, biber veya domates eklemek emilimi 3 katına çıkarır.',
+  'Süt ve süt ürünleri demir emilimini azaltır — bakliyat ve etli yemekleri yoğurttan en az 1 saat ayrı tüket. Ama 2 yaş için yoğurdu kesme, sadece zamanla.',
+  'Çocuklarda yağda eriyen vitaminler (A, D, E, K) için yemeklere mutlaka biraz zeytinyağı veya tereyağı ekle.',
+  'Tatlı patates ve havuçtaki beta-karoten yağ ile birlikte daha iyi emilir.',
+  'Bakliyatı akşamdan ıslatmak fitik asidini azaltır, demir ve çinko emilimini artırır.',
+  'Kuşkonmaz, brokoli gibi sebzeleri haşlamak yerine buharda pişirmek C vitamini kaybını azaltır.',
+  'Mayıs ayında Berlin\'de Spargel (kuşkonmaz) sezonunun zirvesindesin — folat ve C vitamini açısından zengin.',
+];
+
+// Mevsim tespiti
+function getCurrentSeason() {
+  const m = new Date().getMonth() + 1;
+  if (m >= 3 && m <= 5) return 'spring';
+  if (m >= 6 && m <= 8) return 'summer';
+  if (m >= 9 && m <= 11) return 'autumn';
+  return 'winter';
+}
+
+// Mevsim filtresi
+function isInSeason(meal, currentSeason) {
+  if (!meal.season || meal.season === 'all') return true;
+  if (Array.isArray(meal.season)) {
+    return meal.season.includes(currentSeason) || meal.season.includes('all');
+  }
+  return meal.season === currentSeason;
+}
+
+</script>
+<script>
+const DAYS = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+const DAYS_SHORT = ['PZT', 'SAL', 'ÇAR', 'PER', 'CUM', 'CMT', 'PAZ'];
+const SEASON_LABELS = { spring: 'İlkbahar', summer: 'Yaz', autumn: 'Sonbahar', winter: 'Kış' };
+const STORAGE_KEY = 'sofra:current-week';
+const CHECKED_KEY = 'sofra:checked-items';
+const CUSTOM_MEALS_KEY = 'sofra:custom-meals';
+const BACKUP_COUNTER_KEY = 'sofra:backup-counter';
+const BACKUP_THRESHOLD = 5;
+
+let currentWeek = null;
+let checkedItems = new Set();
+let selectedDayIdx = null;
+let selectedSlot = 'dinner';
+
+// Storage — window.storage (artifact ortamı) varsa onu, yoksa localStorage'a düş
+const HAS_CLAUDE_STORAGE = typeof window !== 'undefined'
+  && window.storage
+  && typeof window.storage.get === 'function';
+
+async function storageGet(key) {
+  if (HAS_CLAUDE_STORAGE) {
+    try {
+      const r = await window.storage.get(key);
+      return r ? JSON.parse(r.value) : null;
+    } catch { return null; }
+  }
+  // localStorage fallback
+  try {
+    const v = localStorage.getItem(key);
+    return v ? JSON.parse(v) : null;
+  } catch { return null; }
+}
+async function storageSet(key, value) {
+  if (HAS_CLAUDE_STORAGE) {
+    try { await window.storage.set(key, JSON.stringify(value)); } catch {}
+    return;
+  }
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
+
+function pickRandom(arr, exclude = []) {
+  const filtered = arr.filter(m => !exclude.includes(m.id));
+  if (filtered.length === 0) return arr[Math.floor(Math.random() * arr.length)];
+  return filtered[Math.floor(Math.random() * filtered.length)];
+}
+
+// Mevsim filtresi uygulanmış havuz
+function getSeasonalPool(category, season) {
+  const all = MEAL_DATABASE[category] || [];
+  return all.filter(m => isInSeason(m, season));
+}
+
+function generateWeek() {
+  const season = getCurrentSeason();
+  const usedIds = [];
+  const dinners = new Array(7).fill(null);
+
+  const groundMeatCount = Math.random() < 0.5 ? 2 : 3;
+  const chickenCount = Math.random() < 0.7 ? 1 : 0;
+  const fishCount = 1;
+  const legumesCount = 1;
+  const vegCount = 7 - (groundMeatCount + chickenCount + fishCount + legumesCount);
+
+  const plan = [
+    ...Array(fishCount).fill('fish'),
+    ...Array(legumesCount).fill('legumes'),
+    ...Array(groundMeatCount).fill('groundMeat'),
+    ...Array(chickenCount).fill('chicken'),
+    ...Array(vegCount).fill('vegetable'),
+  ];
+
+  // Shuffle
+  for (let i = plan.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [plan[i], plan[j]] = [plan[j], plan[i]];
+  }
+
+  plan.forEach((cat, idx) => {
+    const pool = getSeasonalPool(cat, season);
+    if (pool.length === 0) return;
+    const meal = pickRandom(pool, usedIds);
+    usedIds.push(meal.id);
+    dinners[idx] = meal;
+  });
+
+  // Haftaiçi öğleler
+  const lunches = new Array(7).fill(null);
+  const usedLunchIds = [];
+  const lunchPool = getSeasonalPool('weekdayLunch', season);
+  for (let i = 0; i < 5; i++) {
+    if (lunchPool.length === 0) break;
+    const m = pickRandom(lunchPool, usedLunchIds);
+    usedLunchIds.push(m.id);
+    lunches[i] = m;
+  }
+
+  return {
+    days: dinners.map((d, i) => ({ dinner: d, lunch: lunches[i] })),
+    generatedAt: new Date().toISOString(),
+    season,
+    tipIdx: Math.floor(Math.random() * NUTRITION_TIPS.length),
+  };
+}
+
+function shuffleMeal(dayIdx, slot = 'dinner') {
+  const day = currentWeek.days[dayIdx];
+  const currentMeal = day[slot];
+  if (!currentMeal) return;
+  const cat = currentMeal.category;
+  const season = getCurrentSeason();
+  const pool = getSeasonalPool(cat, season);
+  // Aynı haftadaki aynı kategorideki yemekleri hariç tut
+  const usedIds = currentWeek.days
+    .map(d => d[slot])
+    .filter(m => m && m.category === cat)
+    .map(m => m.id);
+  const newMeal = pickRandom(pool, usedIds);
+  day[slot] = newMeal;
+  saveWeek();
+  render();
+}
+
+async function saveWeek() { await storageSet(STORAGE_KEY, currentWeek); }
+async function saveChecked() { await storageSet(CHECKED_KEY, [...checkedItems]); }
+
+// RENDER
+function render() {
+  renderTip();
+  renderWeekGrid();
+  renderShopping();
+  renderWeekLabel();
+  renderSeason();
+}
+
+function renderSeason() {
+  const s = getCurrentSeason();
+  document.getElementById('seasonBadge').textContent = `Sezon · ${SEASON_LABELS[s]}`;
+}
+
+function renderTip() {
+  document.getElementById('tipText').textContent = NUTRITION_TIPS[currentWeek.tipIdx % NUTRITION_TIPS.length];
+}
+
+function renderWeekLabel() {
+  const d = new Date(currentWeek.generatedAt);
+  const fmt = d.toLocaleDateString('tr-TR', { day: 'numeric', month: 'long' });
+  document.getElementById('weekLabel').textContent = `Plan: ${fmt}`;
+}
+
+function renderPrepBadge(meal) {
+  if (!meal || !meal.prepTime) return '';
+  const fast = meal.prepTime <= 25;
+  return `<span class="prep-badge${fast ? ' fast' : ''}">⏱ ${meal.prepTime} dk</span>`;
+}
+
+function renderWeekGrid() {
+  const grid = document.getElementById('weekGrid');
+  grid.innerHTML = '';
+  currentWeek.days.forEach((day, idx) => {
+    const isWeekend = idx >= 5;
+    const card = document.createElement('div');
+    card.className = 'day-card' + (selectedDayIdx === idx ? ' selected' : '');
+    card.innerHTML = `
+      <div class="day-head">
+        <div class="day-name ${isWeekend ? 'weekend' : ''}">${DAYS[idx]}</div>
+        <div class="day-num">${DAYS_SHORT[idx]}</div>
+      </div>
+      ${!isWeekend && day.lunch ? `
+        <div class="meal-slot" data-slot="lunch">
+          <div class="meal-label">
+            <span><span class="category-dot dot-${day.lunch.category}"></span>Öğle</span>
+            <button class="shuffle-btn" data-slot="lunch" data-idx="${idx}" title="Yemeği değiştir">↻</button>
+          </div>
+          <div class="meal-name">${day.lunch.name}</div>
+          <div class="meal-meta">
+            ${renderPrepBadge(day.lunch)}
+          </div>
+        </div>
+      ` : ''}
+      ${day.dinner ? `
+        <div class="meal-slot" data-slot="dinner">
+          <div class="meal-label">
+            <span><span class="category-dot dot-${day.dinner.category}"></span>Akşam</span>
+            <button class="shuffle-btn" data-slot="dinner" data-idx="${idx}" title="Yemeği değiştir">↻</button>
+          </div>
+          <div class="meal-name">${day.dinner.name}</div>
+          <div class="meal-meta">
+            ${renderPrepBadge(day.dinner)}
+            ${(day.dinner.tags || []).slice(0, 1).map(t => `<span class="tag-chip">${t}</span>`).join('')}
+          </div>
+        </div>
+      ` : ''}
+    `;
+    // Tıklama: hangi slot tıklandı?
+    card.querySelectorAll('.meal-slot').forEach(slotEl => {
+      slotEl.addEventListener('click', (e) => {
+        if (e.target.closest('.shuffle-btn')) return;
+        openModal(idx, slotEl.dataset.slot);
+      });
+    });
+    card.querySelectorAll('.shuffle-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        shuffleMeal(parseInt(btn.dataset.idx), btn.dataset.slot);
+      });
+    });
+    grid.appendChild(card);
+  });
+}
+
+// SHOPPING
+function aggregateShopping() {
+  const map = new Map();
+  currentWeek.days.forEach(d => {
+    [d.dinner, d.lunch].forEach(meal => {
+      if (!meal) return;
+      meal.ingredients.forEach(ing => {
+        const key = ing.name;
+        if (!map.has(key)) map.set(key, []);
+        map.get(key).push({ amount: ing.amount, unit: ing.unit });
+      });
+    });
+  });
+  const out = new Map();
+  for (const [name, list] of map) {
+    const byUnit = {};
+    list.forEach(({ amount, unit }) => {
+      byUnit[unit] = (byUnit[unit] || 0) + amount;
+    });
+    const display = Object.entries(byUnit)
+      .map(([unit, amt]) => `${Math.round(amt * 100) / 100} ${unit}`)
+      .join(' + ');
+    out.set(name, display);
+  }
+  return out;
+}
+
+function categorizeIngredient(name) {
+  const n = name.toLowerCase();
+  if (/balık|somon|levrek|ton/.test(n)) return 'Balık';
+  if (/kıyma|et|tavuk|kuşbaşı/.test(n)) return 'Et & Kümes';
+  if (/peynir|yoğurt|süt|tereyağı|krema|mozarella|feta|lor|kaşar|parmesan/.test(n)) return 'Süt Ürünleri';
+  if (/yumurta/.test(n)) return 'Süt Ürünleri';
+  if (/mercimek|nohut|fasulye(?! \(taze)|edamame/.test(n)) return 'Bakliyat';
+  if (/pirinç|bulgur|makarna|kuskus|spagetti|şehriye|un|galeta|yufka|ekmek|pita|dürüm/.test(n)) return 'Tahıllar & Ekmek';
+  if (/zeytinyağı|susam yağı|tahin|bal|salça|sos|soya|nar ekşisi|pesto|humus|kapari|zeytin|falafel|hardal/.test(n)) return 'Konserve & Sos';
+  if (/kekik|biberiye|kimyon|sumak|nane|muskat|karabiber|pul biber|çörek otu|tuz|şeker|toz şeker|susam/.test(n)) return 'Baharat';
+  return 'Sebze & Meyve';
+}
+
+function renderShopping() {
+  const grid = document.getElementById('shoppingGrid');
+  const data = aggregateShopping();
+  const grouped = {};
+  for (const [name, amount] of data) {
+    const cat = categorizeIngredient(name);
+    if (!grouped[cat]) grouped[cat] = [];
+    grouped[cat].push({ name, amount });
+  }
+  const order = ['Sebze & Meyve', 'Et & Kümes', 'Balık', 'Bakliyat', 'Süt Ürünleri', 'Tahıllar & Ekmek', 'Konserve & Sos', 'Baharat'];
+  grid.innerHTML = '';
+  order.forEach(cat => {
+    if (!grouped[cat]) return;
+    const items = grouped[cat].sort((a, b) => a.name.localeCompare(b.name, 'tr'));
+    const sec = document.createElement('div');
+    sec.className = 'shop-category';
+    sec.innerHTML = `
+      <h3>${cat}</h3>
+      ${items.map(it => {
+        const id = `${cat}::${it.name}`;
+        const checked = checkedItems.has(id);
+        return `
+          <label class="shop-item ${checked ? 'checked' : ''}">
+            <input type="checkbox" ${checked ? 'checked' : ''} data-id="${id}">
+            <span class="shop-name">${it.name}</span>
+            <span class="shop-amount">${it.amount}</span>
+          </label>
+        `;
+      }).join('')}
+    `;
+    grid.appendChild(sec);
+  });
+  grid.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      const id = cb.dataset.id;
+      if (cb.checked) checkedItems.add(id);
+      else checkedItems.delete(id);
+      cb.closest('.shop-item').classList.toggle('checked', cb.checked);
+      saveChecked();
+    });
+  });
+}
+
+// MODAL
+function openModal(dayIdx, slot = 'dinner') {
+  selectedDayIdx = dayIdx;
+  selectedSlot = slot;
+  const day = currentWeek.days[dayIdx];
+  const meal = day[slot];
+  if (!meal) return;
+  document.getElementById('modalDay').textContent = `${DAYS[dayIdx]} · ${slot === 'dinner' ? 'Akşam' : 'Öğle'}`;
+  document.getElementById('modalTitle').textContent = meal.name;
+  const prepEl = document.getElementById('modalPrep');
+  if (meal.prepTime) {
+    prepEl.style.display = 'inline-flex';
+    prepEl.textContent = `⏱ ${meal.prepTime} dakika`;
+    prepEl.className = 'prep-badge' + (meal.prepTime <= 25 ? ' fast' : '');
+  } else { prepEl.style.display = 'none'; }
+  document.getElementById('modalSide').textContent = meal.side ? `eşlikçi: ${meal.side}` : '';
+  if (meal.tip) {
+    document.getElementById('tipSection').style.display = 'block';
+    document.getElementById('modalTip').textContent = meal.tip;
+  } else {
+    document.getElementById('tipSection').style.display = 'none';
+  }
+  const ingHtml = meal.ingredients.map(ing => `
+    <div class="ingredient">
+      <span>${ing.name}</span>
+      <span class="qty">${ing.amount} ${ing.unit}</span>
+    </div>
+  `).join('');
+  document.getElementById('modalIngredients').innerHTML = ingHtml;
+  document.getElementById('recipeSection').style.display = 'none';
+  document.getElementById('modal').classList.add('active');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('active');
+  selectedDayIdx = null;
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modal').addEventListener('click', (e) => {
+  if (e.target.id === 'modal') closeModal();
+});
+
+document.getElementById('shuffleMealBtn').addEventListener('click', () => {
+  if (selectedDayIdx === null) return;
+  const idx = selectedDayIdx;
+  const slot = selectedSlot;
+  shuffleMeal(idx, slot);
+  setTimeout(() => openModal(idx, slot), 100);
+});
+
+document.getElementById('getRecipeBtn').addEventListener('click', () => {
+  if (selectedDayIdx === null) return;
+  const meal = currentWeek.days[selectedDayIdx][selectedSlot];
+  showRecipe(meal);
+});
+
+function showRecipe(meal) {
+  const section = document.getElementById('recipeSection');
+  const list = document.getElementById('modalRecipe');
+  if (meal.recipe && meal.recipe.length) {
+    list.innerHTML = meal.recipe.map(step => `<li>${step}</li>`).join('');
+    section.style.display = 'block';
+    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+// TABS
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.dataset.tab;
+    document.getElementById('menu-tab').style.display = tab === 'menu' ? 'block' : 'none';
+    document.getElementById('shopping-tab').style.display = tab === 'shopping' ? 'block' : 'none';
+  });
+});
+
+// NEW WEEK
+document.getElementById('newWeekBtn').addEventListener('click', async () => {
+  if (!confirm('Yeni bir hafta menüsü oluşturulsun mu? Mevcut menü silinecek.')) return;
+  currentWeek = generateWeek();
+  checkedItems = new Set();
+  await saveWeek();
+  await saveChecked();
+  render();
+});
+
+// ============ CUSTOM YEMEK YÖNETİMİ ============
+
+const KNOWN_UNITS = [
+  'g', 'kg', 'ml', 'l',
+  'su bardağı', 'çay bardağı', 'çay kaşığı', 'yemek kaşığı', 'tatlı kaşığı',
+  'adet', 'demet', 'diş', 'dilim', 'dal', 'kutu', 'paket', 'çimdik', 'tutam',
+];
+
+// "200 g somon fileto" → { amount: 200, unit: 'g', name: 'somon fileto' }
+// "tuz" → { amount: 1, unit: 'çimdik', name: 'tuz' }
+function parseIngredientLine(line) {
+  const trimmed = line.trim();
+  if (!trimmed) return null;
+
+  // Sayı ile başlıyor mu?
+  const numMatch = trimmed.match(/^([\d]+(?:[.,]\d+)?)\s+(.+)$/);
+  if (!numMatch) {
+    // Sayısız: muhtemelen "tuz", "karabiber" gibi
+    return { amount: 1, unit: 'çimdik', name: trimmed };
+  }
+
+  const amount = parseFloat(numMatch[1].replace(',', '.'));
+  const rest = numMatch[2].trim();
+
+  // Bilinen birim arıyoruz, en uzun eşleşmeyi bul
+  let bestUnit = null;
+  let nameStart = '';
+  const sortedUnits = [...KNOWN_UNITS].sort((a, b) => b.length - a.length);
+  for (const u of sortedUnits) {
+    const re = new RegExp(`^${u.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s+(.+)$`, 'i');
+    const m = rest.match(re);
+    if (m) {
+      bestUnit = u;
+      nameStart = m[1].trim();
+      break;
+    }
+  }
+
+  if (bestUnit) return { amount, unit: bestUnit, name: nameStart };
+
+  // Birim yok: ilk kelime adettir kabul et, gerisi isim
+  return { amount, unit: 'adet', name: rest };
+}
+
+function generateMealId(name) {
+  const slug = name
+    .toLowerCase()
+    .replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return `custom-${slug}-${Date.now().toString(36).slice(-4)}`;
+}
+
+let customMeals = [];
+
+async function loadCustomMeals() {
+  const stored = await storageGet(CUSTOM_MEALS_KEY);
+  customMeals = Array.isArray(stored) ? stored : [];
+  // Havuza karıştır
+  mergeCustomMealsIntoDatabase();
+}
+
+function mergeCustomMealsIntoDatabase() {
+  // Önce eski custom yemekleri temizle (id "custom-" ile başlayanlar)
+  Object.keys(MEAL_DATABASE).forEach(cat => {
+    MEAL_DATABASE[cat] = MEAL_DATABASE[cat].filter(m => !m.id.startsWith('custom-'));
+  });
+  // Sonra mevcut custom'ları ekle
+  customMeals.forEach(meal => {
+    if (MEAL_DATABASE[meal.category]) {
+      MEAL_DATABASE[meal.category].push(meal);
+    }
+  });
+}
+
+async function saveCustomMeals() {
+  await storageSet(CUSTOM_MEALS_KEY, customMeals);
+}
+
+function downloadBackup() {
+  if (customMeals.length === 0) return;
+  const blob = new Blob([JSON.stringify(customMeals, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const date = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  a.href = url;
+  a.download = `sofra-custom-yemekler-${date}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function checkAndAutoBackup() {
+  const counter = (await storageGet(BACKUP_COUNTER_KEY)) || 0;
+  const newCounter = counter + 1;
+  if (newCounter >= BACKUP_THRESHOLD) {
+    downloadBackup();
+    await storageSet(BACKUP_COUNTER_KEY, 0);
+    return true;
+  } else {
+    await storageSet(BACKUP_COUNTER_KEY, newCounter);
+    return false;
+  }
+}
+
+// ============ EKLEME MODAL ============
+
+function openAddModal() {
+  document.getElementById('addModal').classList.add('active');
+  document.getElementById('formError').classList.remove('active');
+  document.getElementById('formSuccess').classList.remove('active');
+  document.getElementById('customCount').textContent =
+    `${customMeals.length} custom yemek`;
+  // Form alanlarını sıfırla
+  ['f-name', 'f-prep', 'f-side', 'f-ingredients', 'f-recipe', 'f-tip'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+  document.getElementById('f-category').value = 'fish';
+  document.getElementById('f-season').value = 'all';
+}
+
+function closeAddModal() {
+  document.getElementById('addModal').classList.remove('active');
+}
+
+async function saveNewMeal() {
+  const errEl = document.getElementById('formError');
+  const okEl = document.getElementById('formSuccess');
+  errEl.classList.remove('active');
+  okEl.classList.remove('active');
+
+  const name = document.getElementById('f-name').value.trim();
+  const category = document.getElementById('f-category').value;
+  const season = document.getElementById('f-season').value;
+  const prepTime = parseInt(document.getElementById('f-prep').value);
+  const side = document.getElementById('f-side').value.trim();
+  const ingredientsRaw = document.getElementById('f-ingredients').value.trim();
+  const recipeRaw = document.getElementById('f-recipe').value.trim();
+  const tip = document.getElementById('f-tip').value.trim();
+
+  // Validasyon
+  if (!name) return showError('Yemek adı zorunlu.');
+  if (!prepTime || prepTime < 5) return showError('Hazırlık süresi geçerli olmalı.');
+  if (!ingredientsRaw) return showError('En az bir malzeme gerekli.');
+  if (!recipeRaw) return showError('Tarif boş olamaz.');
+
+  // Parse
+  const ingredients = ingredientsRaw
+    .split('\n')
+    .map(parseIngredientLine)
+    .filter(Boolean);
+  const recipe = recipeRaw.split('\n').map(s => s.trim()).filter(Boolean);
+
+  if (ingredients.length === 0) return showError('Malzemeler ayrıştırılamadı.');
+  if (recipe.length === 0) return showError('Tarif adımları boş.');
+
+  const meal = {
+    id: generateMealId(name),
+    name,
+    category,
+    season,
+    prepTime,
+    tags: ['kendi tarifim'],
+    side: side || '',
+    tip: tip || '',
+    ingredients,
+    recipe,
+  };
+
+  customMeals.push(meal);
+  await saveCustomMeals();
+  mergeCustomMealsIntoDatabase();
+
+  const backedUp = await checkAndAutoBackup();
+
+  okEl.textContent = backedUp
+    ? `✓ "${name}" eklendi. Otomatik yedek indirildi (${customMeals.length}. yemek).`
+    : `✓ "${name}" eklendi. Havuza katıldı.`;
+  okEl.classList.add('active');
+  document.getElementById('customCount').textContent =
+    `${customMeals.length} custom yemek`;
+  setTimeout(() => okEl.classList.remove('active'), 4500);
+
+  // Formu temizle ki ardarda ekleme yapılabilsin
+  ['f-name', 'f-prep', 'f-side', 'f-ingredients', 'f-recipe', 'f-tip'].forEach(id => {
+    document.getElementById(id).value = '';
+  });
+}
+
+function showError(msg) {
+  const errEl = document.getElementById('formError');
+  errEl.textContent = msg;
+  errEl.classList.add('active');
+}
+
+// Eventler
+document.getElementById('addMealBtn').addEventListener('click', openAddModal);
+document.getElementById('addModalClose').addEventListener('click', closeAddModal);
+document.getElementById('cancelAddBtn').addEventListener('click', closeAddModal);
+document.getElementById('addModal').addEventListener('click', (e) => {
+  if (e.target.id === 'addModal') closeAddModal();
+});
+document.getElementById('saveMealBtn').addEventListener('click', saveNewMeal);
+document.getElementById('exportNowBtn').addEventListener('click', () => {
+  if (customMeals.length === 0) {
+    showError('Henüz custom yemek yok.');
+    return;
+  }
+  downloadBackup();
+  const okEl = document.getElementById('formSuccess');
+  okEl.textContent = `✓ ${customMeals.length} yemek yedeklendi.`;
+  okEl.classList.add('active');
+});
+
+// INIT
+async function init() {
+  currentWeek = await storageGet(STORAGE_KEY);
+  const checkedArr = await storageGet(CHECKED_KEY);
+  if (checkedArr && Array.isArray(checkedArr)) checkedItems = new Set(checkedArr);
+
+  // Önce custom meals'i yükle (havuza eklensin)
+  await loadCustomMeals();
+
+  if (!currentWeek) {
+    currentWeek = generateWeek();
+    await saveWeek();
+  } else {
+    // Veritabanı güncellenince eski referansları temizle / yenisiyle eşle
+    let needsRefresh = false;
+    currentWeek.days.forEach((day) => {
+      ['dinner', 'lunch'].forEach(slot => {
+        const meal = day[slot];
+        if (meal) {
+          const cat = meal.category;
+          const found = MEAL_DATABASE[cat]?.find(m => m.id === meal.id);
+          if (found) day[slot] = found;
+          else { day[slot] = null; needsRefresh = true; }
+        }
+      });
+    });
+    if (needsRefresh) await saveWeek();
+  }
+  render();
+}
+
+init();
+
+// PWA: service worker kaydı
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch((err) => {
+      console.warn('SW kayıt başarısız:', err);
+    });
+  });
+}
+</script>
+</body>
+</html>

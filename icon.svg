@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <radialGradient id="bg" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#faf6ef"/>
+      <stop offset="100%" stop-color="#f3ede1"/>
+    </radialGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#c2603e" stroke-width="4" stroke-dasharray="2 8" opacity="0.35"/>
+  <text x="256" y="356"
+        font-family="Georgia, 'Times New Roman', serif"
+        font-style="italic"
+        font-weight="500"
+        font-size="320"
+        fill="#c2603e"
+        text-anchor="middle"
+        letter-spacing="-8">S</text>
+  <circle cx="380" cy="354" r="14" fill="#6b7a3d"/>
+</svg>
